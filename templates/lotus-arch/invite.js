@@ -259,6 +259,81 @@
     els.forEach((el) => io.observe(el));
   }
 
+  // Depth effects. Phones/tablets: as the card scrolls away, each layer trails
+  // behind it by a different amount. Desktop (card is fixed): layers shift with
+  // the mouse and the card tilts. Decorations beside the sections scroll slower
+  // than the page everywhere.
+  function setupParallax() {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const card = document.querySelector(".card");
+    const q = (s) => card.querySelector(s);
+    // scroll: fraction of the scroll a layer lags behind (0 = moves with the card).
+    // mouse: how far it shifts with the pointer (bigger = closer to the viewer).
+    // Clamps keep layers that touch an edge of the card from pulling away from it.
+    const layers = [
+      { el: q(".layer--bg"), scroll: 0.3, mouse: -0.5 },
+      { el: q(".layer--arch"), scroll: 0.2, mouse: 0.3 },
+      { el: q(".lanterns"), scroll: 0.12, mouse: 0.6, clampY: "up" },
+      { el: q(".layer--om"), scroll: 0.15, mouse: 0.45 },
+      { el: q(".text"), scroll: 0.15, mouse: 0.45 },
+      { el: q(".layer--florals-left"), scroll: 0, mouse: 1, side: -1, clampY: "down" },
+      { el: q(".layer--florals-right"), scroll: 0, mouse: 1, side: 1, clampY: "down" },
+    ];
+    const decos = [...document.querySelectorAll(".deco[data-speed]")];
+    const desktop = matchMedia("(min-width: 960px)");
+    const MOUSE_PX = 14, TILT_DEG = 3, SPREAD = 0.08;
+    let mx = 0, my = 0, tx = 0, ty = 0, queued = false;
+
+    function frame() {
+      queued = false;
+      if (desktop.matches) {
+        mx += (tx - mx) * 0.08;
+        my += (ty - my) * 0.08;
+        layers.forEach((l) => {
+          let x = mx * l.mouse * MOUSE_PX, y = my * l.mouse * MOUSE_PX;
+          if (l.side) x = l.side < 0 ? Math.min(0, x) : Math.max(0, x);
+          if (l.clampY === "up") y = Math.min(0, y);
+          if (l.clampY === "down") y = Math.max(0, y);
+          l.el.style.translate = x.toFixed(2) + "px " + y.toFixed(2) + "px";
+        });
+        card.style.transform = "perspective(1400px) rotateX(" + (-my * TILT_DEG).toFixed(2) +
+          "deg) rotateY(" + (mx * TILT_DEG).toFixed(2) + "deg)";
+        if (Math.abs(tx - mx) > 0.002 || Math.abs(ty - my) > 0.002) request();
+      } else {
+        const p = Math.max(0, -card.getBoundingClientRect().top);
+        if (p <= card.offsetHeight) {
+          layers.forEach((l) => {
+            l.el.style.translate = ((l.side || 0) * p * SPREAD).toFixed(1) + "px " + (p * l.scroll).toFixed(1) + "px";
+          });
+        }
+      }
+      const vh = window.innerHeight;
+      decos.forEach((d) => {
+        const r = d.parentElement.getBoundingClientRect();
+        d.style.translate = "0 " + ((r.top + r.height / 2 - vh / 2) * parseFloat(d.dataset.speed)).toFixed(1) + "px";
+      });
+    }
+
+    function request() {
+      if (!queued) { queued = true; requestAnimationFrame(frame); }
+    }
+
+    window.addEventListener("scroll", request, { passive: true });
+    window.addEventListener("resize", () => {
+      // Leaving desktop: drop the tilt. Layer offsets are recalculated either way.
+      if (!desktop.matches) card.style.transform = "";
+      request();
+    });
+    window.addEventListener("pointermove", (e) => {
+      if (e.pointerType !== "mouse") return;
+      tx = (e.clientX / window.innerWidth) * 2 - 1;
+      ty = (e.clientY / window.innerHeight) * 2 - 1;
+      request();
+    }, { passive: true });
+    document.documentElement.addEventListener("mouseleave", () => { tx = ty = 0; request(); });
+    request();
+  }
+
   function open() {
     if (document.body.classList.contains("is-open")) return;
     document.body.classList.replace("is-closed", "is-open");
@@ -274,5 +349,6 @@
     fill(data);
     makePetals();
     revealOnScroll();
+    setupParallax();
   }).catch((err) => console.error("Could not load the invite details.", err));
 })();
