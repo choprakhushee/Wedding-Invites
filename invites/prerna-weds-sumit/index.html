@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Prerna &amp; Sumit — Wedding Invitation</title>
+  <meta name="description" content="You are invited to our wedding on 13 December 2026">
+  <!-- Link preview for WhatsApp / Instagram / iMessage -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Prerna &amp; Sumit — Wedding Invitation">
+  <meta property="og:description" content="You are invited to our wedding on 13 December 2026">
+  <meta property="og:image" content="https://choprakhushee.github.io/wedding-invites/templates/lotus-arch/preview.jpg">
+  <meta name="theme-color" content="#fff5e9">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="../../templates/lotus-arch/layers/background.webp">
+  <link rel="stylesheet" href="../../templates/lotus-arch/invite.css">
+</head>
+<body class="is-closed">
+
+  <!-- Opening doors -->
+  <button class="doors" id="doors" type="button" aria-label="Open the invitation">
+    <span class="door door--left"></span>
+    <span class="door door--right"></span>
+    <span class="seal">
+      <img class="seal__om" src="../../templates/lotus-arch/layers/om-mark.webp" alt="">
+      <span class="seal__initials" data-field="initials"></span>
+      <span class="seal__hint">Tap to open</span>
+    </span>
+  </button>
+
+  <div class="petals" aria-hidden="true"></div>
+
+  <main>
+    <!-- The invitation card: Canva layers + live text -->
+    <section class="card" aria-label="Wedding invitation">
+      <img class="layer layer--bg" src="../../templates/lotus-arch/layers/background.webp" alt="">
+      <img class="layer layer--arch" src="../../templates/lotus-arch/layers/arch.webp" alt="">
+      <div class="layer lanterns">
+        <img class="lantern lantern--a-left" src="../../templates/lotus-arch/layers/lanterns.webp" alt="">
+        <img class="lantern lantern--b-left" src="../../templates/lotus-arch/layers/lanterns.webp" alt="">
+        <img class="lantern lantern--b-right" src="../../templates/lotus-arch/layers/lanterns.webp" alt="">
+        <img class="lantern lantern--a-right" src="../../templates/lotus-arch/layers/lanterns.webp" alt="">
+      </div>
+      <img class="layer layer--florals-left" src="../../templates/lotus-arch/layers/florals-left.webp" alt="">
+      <img class="layer layer--florals-right" src="../../templates/lotus-arch/layers/florals-right.webp" alt="">
+      <img class="layer layer--om" src="../../templates/lotus-arch/layers/om.webp" alt="">
+
+      <div class="text">
+        <p class="t t--intro" style="--y:138" data-field="intro"></p>
+        <h1 class="t t--name" style="--y:162" data-field="bride_name"></h1>
+        <p class="t t--amp" style="--y:205">&amp;</p>
+        <p class="t t--name" style="--y:230" data-field="groom_name"></p>
+        <p class="t t--line" style="--y:294" data-field="invite_line"></p>
+        <p class="t t--month" style="--y:337" data-field="date_month"></p>
+        <div class="t date-row" style="--y:359">
+          <span class="date-row__side date-row__side--left" data-field="date_weekday"></span>
+          <span class="date-row__day" data-field="date_day"></span>
+          <span class="date-row__side date-row__side--right" data-field="time"></span>
+        </div>
+        <p class="t t--year" style="--y:392" data-field="date_year"></p>
+        <p class="t t--at" style="--y:412">at</p>
+        <p class="t t--venue" style="--y:436" data-field="venue"></p>
+        <p class="t t--rsvp" style="--y:488" data-field="rsvp_line"></p>
+      </div>
+    </section>
+
+    <section class="section countdown" data-show-if="countdown_to">
+      <h2 class="section__title">Counting down</h2>
+      <div class="countdown__grid" id="countdown">
+        <div><span data-unit="days">0</span><small>Days</small></div>
+        <div><span data-unit="hours">0</span><small>Hours</small></div>
+        <div><span data-unit="minutes">0</span><small>Minutes</small></div>
+        <div><span data-unit="seconds">0</span><small>Seconds</small></div>
+      </div>
+      <p class="countdown__done" hidden data-field="married_message"></p>
+    </section>
+
+    <section class="section events" data-show-if="events">
+      <h2 class="section__title" data-field="events_title"></h2>
+      <div class="events__list" id="events"></div>
+    </section>
+
+    <section class="section rsvp" data-show-if="rsvp">
+      <h2 class="section__title">Kindly RSVP</h2>
+      <p class="rsvp__note" data-field="rsvp_note"></p>
+      <div class="rsvp__actions">
+        <a class="btn" id="rsvp-form" target="_blank" rel="noopener" hidden>RSVP online</a>
+        <a class="btn btn--ghost" id="rsvp-whatsapp" target="_blank" rel="noopener" hidden>RSVP on WhatsApp</a>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p class="footer__names" data-field="initials"></p>
+      <a class="btn btn--ghost" id="share" href="#">Share this invite</a>
+      <p class="footer__credit" data-field="credit"></p>
+    </footer>
+  </main>
+
+  <button class="music" id="music" type="button" aria-label="Pause music" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="17" cy="16" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+  </button>
+  <audio id="audio" loop preload="none"></audio>
+
+  <script src="../../templates/lotus-arch/invite.js"></script>
+</body>
+</html>

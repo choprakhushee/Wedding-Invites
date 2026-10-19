@@ -1,0 +1,44 @@
+field,value,notes
+page_title,Prerna & Sumit — Wedding Invitation,Shown in the browser tab and when the link is shared
+intro,Together with their families,Line above the names
+bride_name,Prerna Singh,First name on the card
+groom_name,Sumit Gupta,Second name on the card
+invite_line,cordially invite you to join the occasion of their joyous commitment on,Line below the names
+date_month,December,e.g. December
+date_weekday,Sunday,e.g. Sunday
+date_day,13,e.g. 13
+date_year,2026,e.g. 2026
+time,at 8 PM,"Right of the date, e.g. at 8 PM"
+venue,"Chattarpur Farms,
+New Delhi",Main venue. Press Alt+Enter (Cmd+Enter on Mac) for a new line
+rsvp_line,Kindly RSVP before 1st December,Small line at the bottom of the card
+countdown_to,2026-12-13T20:00:00+05:30,Wedding date and time for the countdown: YYYY-MM-DDTHH:MM:00+05:30. Leave blank to hide
+married_message,Happily married — thank you for your blessings!,Shown after the wedding date has passed
+events_title,Wedding Festivities,Heading above the events
+event_1_name,Haldi,"Leave the name blank to hide an event. Up to 9 events (event_4_..., event_5_...)"
+event_1_date,"Friday, 11 December 2026",
+event_1_time,11 AM,
+event_1_venue,"The Singh Residence,
+Vasant Vihar, New Delhi",
+event_1_note,Dress code: shades of yellow,
+event_1_map,https://maps.google.com/?q=Vasant+Vihar+New+Delhi,Google Maps link for the Directions button
+event_2_name,Mehendi & Sangeet,
+event_2_date,"Saturday, 12 December 2026",
+event_2_time,6 PM onwards,
+event_2_venue,"The Grand Lawn,
+Chattarpur Farms, New Delhi",
+event_2_note,Dress code: Indo-western,
+event_2_map,https://maps.google.com/?q=Chattarpur+Farms+New+Delhi,
+event_3_name,Wedding,
+event_3_date,"Sunday, 13 December 2026",
+event_3_time,Baraat 8 PM · Pheras 11 PM,
+event_3_venue,"Chattarpur Farms,
+New Delhi",
+event_3_note,,
+event_3_map,https://maps.google.com/?q=Chattarpur+Farms+New+Delhi,
+rsvp_note,"We would be honoured by your presence.
+Please let us know if you can make it.",Text in the RSVP section
+rsvp_form_url,,Optional: link to a Google Form
+rsvp_whatsapp,,"Optional: WhatsApp number with country code, e.g. 919876543210"
+music_url,,Optional: link to an MP3 file (use music you have the rights to)
+credit,,Optional: small line at the very bottom

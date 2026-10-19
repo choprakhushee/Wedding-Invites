@@ -1,0 +1,46 @@
+{
+  "sheet_csv_url": "",
+
+  "page_title": "Prerna & Sumit — Wedding Invitation",
+  "intro": "Together with their families",
+  "bride_name": "Prerna Singh",
+  "groom_name": "Sumit Gupta",
+  "invite_line": "cordially invite you to join the occasion of their joyous commitment on",
+  "date_month": "December",
+  "date_weekday": "Sunday",
+  "date_day": "13",
+  "date_year": "2026",
+  "time": "at 8 PM",
+  "venue": "Chattarpur Farms,\nNew Delhi",
+  "rsvp_line": "Kindly RSVP before 1st December",
+
+  "countdown_to": "2026-12-13T20:00:00+05:30",
+  "married_message": "Happily married — thank you for your blessings!",
+
+  "events_title": "Wedding Festivities",
+  "event_1_name": "Haldi",
+  "event_1_date": "Friday, 11 December 2026",
+  "event_1_time": "11 AM",
+  "event_1_venue": "The Singh Residence,\nVasant Vihar, New Delhi",
+  "event_1_note": "Dress code: shades of yellow",
+  "event_1_map": "https://maps.google.com/?q=Vasant+Vihar+New+Delhi",
+  "event_2_name": "Mehendi & Sangeet",
+  "event_2_date": "Saturday, 12 December 2026",
+  "event_2_time": "6 PM onwards",
+  "event_2_venue": "The Grand Lawn,\nChattarpur Farms, New Delhi",
+  "event_2_note": "Dress code: Indo-western",
+  "event_2_map": "https://maps.google.com/?q=Chattarpur+Farms+New+Delhi",
+  "event_3_name": "Wedding",
+  "event_3_date": "Sunday, 13 December 2026",
+  "event_3_time": "Baraat 8 PM · Pheras 11 PM",
+  "event_3_venue": "Chattarpur Farms,\nNew Delhi",
+  "event_3_note": "",
+  "event_3_map": "https://maps.google.com/?q=Chattarpur+Farms+New+Delhi",
+
+  "rsvp_note": "We would be honoured by your presence.\nPlease let us know if you can make it.",
+  "rsvp_form_url": "",
+  "rsvp_whatsapp": "",
+
+  "music_url": "",
+  "credit": ""
+}
