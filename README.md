@@ -4,7 +4,7 @@ Animated wedding invite websites for Indian weddings. Each design is made in Can
 and split into layers, which the website animates. Each couple's text comes from a
 Google Sheet they can edit themselves.
 
-Demo: https://choprakhushee.github.io/wedding-invites/invites/prerna-weds-sumit/
+Demo: https://choprakhushee.github.io/Wedding-Invites/invites/prerna-weds-sumit/
 
 ## How it's organised
 

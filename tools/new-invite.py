@@ -21,7 +21,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SITE_URL = "https://choprakhushee.github.io/wedding-invites"
+SITE_URL = "https://choprakhushee.github.io/Wedding-Invites"
 
 
 def main():
