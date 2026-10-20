@@ -1,25 +1,5 @@
 # Wedding Invites
 
-The Aamantran Atelier studio website lives at the root (`index.html` + `site/`), and the
-couples' invite websites live in `invites/`.
-
-## The studio website
-
-Studio site: https://choprakhushee.github.io/Wedding-Invites/
-
-It's built to the Palace Parlour brand guidelines (maroon, bottle green, blush, gold; Gilda
-Display, Pinyon Script, Jost). Visitors go through it in order: the gate (the chhatri is drawn
-in gold and its doors open), a corridor of arches you walk through as you scroll, then the
-Darbar, the Gallery (a live sample invitation playing the five brand motions), the Colonnade,
-the Toshakhana, the Atelier and the Writing Room (the enquiry form).
-
-**Connecting the enquiry form (about 5 minutes).** Until this is done, the form refuses to send
-and saves nothing. Follow the steps at the top of `tools/leads-apps-script.gs`, then paste the
-web app URL into `LEAD_ENDPOINT` at the top of `site/site.js`, and commit and push. Each enquiry
-goes into a new row in your Google Sheet, and you get an email for each one.
-
-## Couple invites
-
 Animated wedding invite websites for Indian weddings. Each design is made in Canva
 and split into layers, which the website animates. Each couple's text comes from a
 Google Sheet they can edit themselves.
