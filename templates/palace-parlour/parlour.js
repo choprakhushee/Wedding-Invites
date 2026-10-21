@@ -10,7 +10,7 @@
     return;
   }
   const M = window.ParlourMotifs;
-  const BASE = new URL(".", document.currentScript.src).href;
+  const BASE = new URL(".", (document.currentScript && document.currentScript.src) || location.href).href;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const params = new URLSearchParams(location.search);
   const features = Object.assign({ entry: true, countdown: true, story: true, gallery: true, rsvp: true, hindi: true, petals: true, credit: true }, W.features);
