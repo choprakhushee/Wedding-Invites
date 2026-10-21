@@ -40,25 +40,54 @@ def main():
     invite = ROOT / "invites" / args.slug
     invite.mkdir(parents=True, exist_ok=True)
 
-    data_path = invite / "data.json"
+    # Newer templates (temple-gold) use wedding.json; lotus-arch uses data.json.
+    if (template / "sample-wedding.json").exists():
+        data_path, sample = invite / "wedding.json", template / "sample-wedding.json"
+    else:
+        data_path, sample = invite / "data.json", template / "sample-data.json"
     if not data_path.exists():
-        shutil.copy(template / "sample-data.json", data_path)
-        print(f"Created {data_path.relative_to(ROOT)} (sample details: edit it or link a Google Sheet)")
+        shutil.copy(sample, data_path)
+        print(f"Created {data_path.relative_to(ROOT)} (sample details: edit it for the couple)")
 
     data = json.loads(data_path.read_text())
-    title = data.get("page_title") or f"{data.get('bride_name', '')} & {data.get('groom_name', '')}"
-    when = " ".join(filter(None, [data.get("date_day"), data.get("date_month"), data.get("date_year")]))
-    description = "You are invited to our wedding" + (f" on {when}" if when else "")
+    if "meta" in data:
+        title, description, image = preview_from_wedding(data, args.slug, args.template)
+    else:
+        title = data.get("page_title") or f"{data.get('bride_name', '')} & {data.get('groom_name', '')}"
+        when = " ".join(filter(None, [data.get("date_day"), data.get("date_month"), data.get("date_year")]))
+        description = "You are invited to our wedding" + (f" on {when}" if when else "")
+        image = f"{SITE_URL}/templates/{args.template}/preview.jpg"
 
     page = (template / "page.html").read_text()
     page = page.replace("../../templates/lotus-arch/", f"../../templates/{args.template}/")
     page = (page.replace("{{TITLE}}", html.escape(title))
                 .replace("{{DESCRIPTION}}", html.escape(description))
-                .replace("{{PREVIEW_IMAGE}}", f"{SITE_URL}/templates/{args.template}/preview.jpg"))
+                .replace("{{PREVIEW_IMAGE}}", image))
     (invite / "index.html").write_text(page)
 
     print(f"Wrote invites/{args.slug}/index.html")
     print(f"Live link once pushed: {SITE_URL}/invites/{args.slug}/")
+
+
+def preview_from_wedding(data, slug, template):
+    """WhatsApp can't run the page's script, so the preview is written into the HTML."""
+    def en(value):
+        return value.get("en", "") if isinstance(value, dict) else (value or "")
+
+    meta = data.get("meta", {})
+    couple = data.get("couple", {})
+    names = [en(couple.get(k, {}).get("name")) for k in ("bride", "groom")]
+    if couple.get("first") == "groom":
+        names.reverse()
+    title = meta.get("page_title") or " & ".join(filter(None, names))
+    description = meta.get("description") or "You are invited to our wedding"
+    image = meta.get("share_image") or ""
+    if image and not image.startswith("http"):
+        if (ROOT / "invites" / slug / image).exists():
+            image = f"{SITE_URL}/invites/{slug}/{image}"
+        else:
+            image = ""
+    return title, description, image or f"{SITE_URL}/templates/{template}/preview.jpg"
 
 
 if __name__ == "__main__":
