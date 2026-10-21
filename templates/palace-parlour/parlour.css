@@ -1,0 +1,388 @@
+/* Palace Parlour wedding website — shared styles for every couple.
+   Colours can be overridden per couple from config.js (theme). */
+
+@font-face { font-family: "Gilda Display"; src: url("fonts/gilda-display.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: "Pinyon Script"; src: url("fonts/pinyon-script.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: "Jost"; src: url("fonts/jost.woff2") format("woff2"); font-weight: 300 500; font-display: swap; }
+@font-face { font-family: "Tiro Devanagari Hindi"; src: url("fonts/tiro-devanagari-hindi.woff2") format("woff2"); font-display: swap; }
+
+:root {
+  --maroon: #5C1A1B;
+  --green: #1F3A2E;
+  --blush: #E6CFC6;
+  --linen: #F2E9E1;
+  --gold: #C9A56B;
+  --gold-deep: #7A5C2E;
+  --cocoa: #5A4636;
+  --taupe: #A08C7D;
+  --ink: #2B1F1A;
+  --on-dark: #F2E9E1;
+
+  --font-display: "Gilda Display", Didot, Georgia, serif;
+  --font-script: "Pinyon Script", "Snell Roundhand", cursive;
+  --font-sans: "Jost", "Century Gothic", system-ui, sans-serif;
+  --font-deva: "Tiro Devanagari Hindi", "Noto Serif Devanagari", serif;
+
+  --ease: cubic-bezier(0.65, 0, 0.35, 1);
+  --shadow-tag: 0 2px 4px rgba(43, 31, 26, .12), 0 12px 32px rgba(43, 31, 26, .10);
+  --gutter: 20px;
+  --harlequin-size: 336px 308px;
+}
+
+/* Hindi: one Devanagari face everywhere, no letter-spacing (it breaks the shirorekha). */
+.lang-hi {
+  --font-display: var(--font-deva);
+  --font-script: var(--font-deva);
+  --font-sans: var(--font-deva);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--linen);
+  color: var(--ink);
+  font: 300 17px/1.6 var(--font-sans);
+  overflow-x: hidden;
+}
+body.is-locked { overflow: hidden; height: 100svh; }
+img { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+[tabindex="-1"]:focus { outline: none; }
+
+/* Faint paper grain over everything (brand: 5–8%). */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: .06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .17 0 0 0 0 .12 0 0 0 0 .1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ---------- Type ---------- */
+.caps {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: .18em;
+  padding-left: .18em; /* keeps tracked capitals optically centred */
+}
+.script { font-family: var(--font-script); font-weight: 400; line-height: 1.1; }
+.date-caps { font-family: var(--font-sans); font-weight: 400; letter-spacing: .28em; padding-left: .28em; text-transform: uppercase; }
+.lang-hi .caps, .lang-hi .date-caps { letter-spacing: .02em; padding-left: 0; text-transform: none; }
+.lang-hi .script { line-height: 1.5; }
+
+/* ---------- Patterns (text never sits on these directly) ---------- */
+.pattern { background-repeat: repeat; background-position: center top; }
+.pattern--harlequin { background-image: url("patterns/harlequin.svg"); background-color: var(--blush); background-size: var(--harlequin-size); }
+.pattern--pinstripe { background-image: url("patterns/pinstripe.svg"); background-color: var(--taupe); background-size: 160px 160px; }
+.pattern--lattice   { background-image: url("patterns/arch-lattice.svg"); background-color: var(--maroon); background-size: 240px 240px; }
+.pattern--vine      { background-image: url("patterns/floral-vine.svg"); background-color: var(--linen); background-size: 280px 322px; }
+.pattern--damask    { background-image: url("patterns/damask-maroon.svg"); background-color: var(--maroon); background-size: 240px 280px; }
+.pattern--checker   { background-image: url("patterns/checker-bloom.svg"); background-color: var(--green); background-size: 160px 160px; }
+.pattern--buti      { background-image: url("patterns/buti-ivory.svg"); background-color: var(--linen); background-size: 120px 138px; }
+.pattern--vine-green { background-image: url("patterns/vine-green.svg"); background-color: var(--green); background-size: 180px 208px; }
+
+/* ---------- Tag: blush mat + solid face, square corners ---------- */
+.tag {
+  position: relative;
+  padding: 10px;
+  background: var(--blush);
+  box-shadow: var(--shadow-tag);
+}
+.tag__face {
+  position: relative;
+  padding: 34px 26px 30px;
+  background: var(--maroon);
+  color: var(--on-dark);
+  text-align: center;
+  outline: 1px solid rgba(201, 165, 107, .55);
+  outline-offset: -7px;
+}
+.tag__corner {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  pointer-events: none;
+}
+.tag__corner--tl { top: -22px; left: -22px; }
+.tag__corner--tr { top: -22px; right: -22px; transform: scaleX(-1); }
+.tag__corner--bl { bottom: -22px; left: -22px; transform: scaleY(-1); }
+.tag__corner--br { bottom: -22px; right: -22px; transform: scale(-1, -1); }
+
+.rule {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 140px;
+  margin: 18px auto;
+  color: var(--gold);
+}
+.rule::before, .rule::after { content: ""; flex: 1; height: 1px; background: currentColor; opacity: .8; }
+.rule i { width: 7px; height: 7px; transform: rotate(45deg); border: 1px solid currentColor; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  min-width: 44px;
+  padding: 12px 28px;
+  border: 0;
+  border-radius: 0;
+  background: var(--linen);
+  color: var(--maroon);
+  font: 400 13px/1 var(--font-sans);
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: var(--shadow-tag), inset 0 0 0 1px rgba(122, 92, 46, .35);
+  transition: background-color .6s var(--ease), color .6s var(--ease);
+}
+.lang-hi .btn { letter-spacing: .02em; font-size: 16px; text-transform: none; }
+
+/* ==========================================================================
+   ENTRY — harlequin wall, "Tap to open", engraved gate, doors
+   ========================================================================== */
+.entry {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow: hidden;
+  background: var(--blush);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.entry__wall { position: absolute; inset: -2px; }
+.entry__wall::after { /* soft vignette for depth */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 45%, rgba(43, 31, 26, 0) 40%, rgba(43, 31, 26, .32) 100%);
+}
+.entry__scrim {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(ellipse at 50% 55%, #3B1213 0%, #24100F 75%);
+}
+.entry__dust { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+
+.entry__card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  padding: 72px var(--gutter) 48px;
+}
+.entry .tag { width: min(100%, 320px); }
+.entry__kicker { margin: 0; font-size: 13px; color: var(--gold); }
+.entry__monogram {
+  margin: 14px 0 0;
+  font: 400 54px/1 var(--font-display);
+  color: var(--gold);
+  letter-spacing: .06em;
+}
+.entry__monogram span { display: inline-block; margin: 0 .22em; font-size: .52em; vertical-align: .38em; }
+.entry__date { margin: 0; font-size: 13px; color: var(--on-dark); }
+.entry__for { margin: 14px 0 0; font-size: 14px; color: var(--on-dark); opacity: .9; }
+.lang-hi .entry__monogram { font-family: var(--font-deva); font-size: 46px; }
+
+.entry__open { position: relative; }
+.entry__open::after { /* slow breathing gold ring */
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border: 1px solid var(--gold);
+  opacity: 0;
+  animation: breathe 3.2s var(--ease) infinite;
+}
+@keyframes breathe {
+  0%, 100% { opacity: 0; transform: scale(.98); }
+  50% { opacity: .9; transform: scale(1); }
+}
+
+.entry__skip {
+  position: absolute;
+  left: 50%;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  min-height: 44px;
+  padding: 10px 22px;
+  border: 0;
+  background: none;
+  color: var(--blush);
+  font: 400 12px/1 var(--font-sans);
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  opacity: 0;
+  visibility: hidden;
+  cursor: pointer;
+}
+
+/* ----- The gate: 360 × 640 units, scaled to fit the screen ----- */
+.gate {
+  position: absolute;
+  inset: 0 0 56px; /* leaves room for Skip below */
+  margin: auto;
+  height: min(calc(100svh - 96px), 150vw);
+  aspect-ratio: 360 / 640;
+  visibility: hidden;
+  pointer-events: none;
+}
+.gate__frame, .gate__art { position: absolute; inset: 0; width: 100%; height: 100%; }
+.gate__art { object-fit: contain; }
+.gate__fill { fill: var(--maroon); opacity: 0; }
+
+/* Doorway box: x 84, y 186, w 192, h 410 of 360 × 640 (see motifs.js DOOR) */
+.gate__doorway {
+  position: absolute;
+  left: 23.333%;
+  top: 29.0625%;
+  width: 53.333%;
+  height: 64.0625%;
+  clip-path: url(#parlour-doorway);
+  opacity: 0;
+}
+.gate__light {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 62%, rgba(255, 248, 236, 1) 0%, rgba(255, 248, 236, 0) 70%),
+    linear-gradient(180deg, #E9D9C8 0%, var(--linen) 55%, #EADBCB 100%);
+}
+.gate__doors {
+  position: absolute;
+  inset: 0;
+  perspective: 900px;
+}
+.door {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+.door--left { left: 0; transform-origin: 0 50%; }
+.door--right { right: 0; transform-origin: 100% 50%; }
+.door svg, .door img { width: 100%; height: 100%; object-fit: cover; }
+.door--right svg { transform: scaleX(-1); }
+.door__shade { position: absolute; inset: 0; background: #0E1A12; opacity: 0; }
+
+/* Falling petals */
+.petals { position: fixed; inset: 0; z-index: 60; pointer-events: none; overflow: hidden; }
+.petal { position: absolute; top: -40px; width: 18px; height: 18px; will-change: transform; }
+.petal svg, .petal img { width: 100%; height: 100%; }
+
+/* ==========================================================================
+   FLOATING CONTROLS — language and music
+   ========================================================================== */
+.control {
+  position: fixed;
+  z-index: 70;
+  display: grid;
+  place-items: center;
+  min-width: 48px;
+  height: 48px;
+  padding: 0 14px;
+  border: 0;
+  background: var(--maroon);
+  color: var(--gold);
+  box-shadow: var(--shadow-tag), inset 0 0 0 1px rgba(201, 165, 107, .5);
+  cursor: pointer;
+  transition: opacity 1s var(--ease), visibility 1s;
+}
+.control[hidden] { display: none; }
+.control--lang {
+  top: max(14px, env(safe-area-inset-top));
+  right: 14px;
+  font: 400 15px/1 var(--font-deva);
+}
+.control--lang.is-hi { font: 400 12px/1 "Jost", sans-serif; letter-spacing: .2em; padding-left: calc(14px + .2em); text-transform: uppercase; }
+.control--music {
+  right: 14px;
+  bottom: max(14px, env(safe-area-inset-bottom));
+  width: 48px;
+  padding: 0;
+  border-radius: 50%;
+  opacity: 0;
+  visibility: hidden;
+}
+.control--music.is-shown { opacity: 1; visibility: visible; }
+.control--music svg { width: 22px; height: 22px; }
+.control--music .bars rect { transform-origin: 50% 100%; transform-box: fill-box; }
+.control--music.is-playing .bars rect { animation: eq 1.6s var(--ease) infinite alternate; }
+.control--music.is-playing .bars rect:nth-child(2) { animation-delay: -.5s; }
+.control--music.is-playing .bars rect:nth-child(3) { animation-delay: -1s; }
+.control--music .slash { opacity: 1; transition: opacity .6s var(--ease); }
+.control--music.is-playing .slash { opacity: 0; }
+@keyframes eq { from { transform: scaleY(.35); } to { transform: scaleY(1); } }
+
+/* ==========================================================================
+   PAGE SECTIONS
+   ========================================================================== */
+.section { position: relative; padding: 88px var(--gutter); text-align: center; }
+
+/* Couple reveal (stage 2 adds the hand-written animation) */
+.couple {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 64px var(--gutter);
+  background: var(--linen);
+  text-align: center;
+}
+.couple__panel { position: relative; width: min(100%, 520px); padding: 76px 28px; }
+.couple__corner { position: absolute; width: 84px; height: 84px; pointer-events: none; }
+.couple__corner--tl { top: 0; left: 0; }
+.couple__corner--tr { top: 0; right: 0; transform: scaleX(-1); }
+.couple__corner--bl { bottom: 0; left: 0; transform: scaleY(-1); }
+.couple__corner--br { bottom: 0; right: 0; transform: scale(-1, -1); }
+.couple__kicker { margin: 0 0 18px; font-size: 13px; color: var(--gold-deep); }
+.couple__names { margin: 0; color: var(--maroon); font-size: clamp(58px, 17vw, 112px); }
+.couple__names .amp { display: block; margin: .02em 0; font-size: .55em; color: var(--gold-deep); }
+.couple__together { margin: 22px 0 0; font-size: 18px; color: var(--cocoa); }
+.couple__date { margin: 6px 0 0; font-size: 15px; color: var(--maroon); }
+.lang-hi .couple__names { font-size: clamp(48px, 13vw, 88px); }
+
+/* ---------- Footer ---------- */
+.footer { padding: 28px var(--gutter) calc(80px + env(safe-area-inset-bottom)); text-align: center; background: var(--maroon); color: var(--on-dark); }
+.footer__credit { margin: 0; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); }
+.footer__credit a { color: inherit; }
+
+/* ==========================================================================
+   Wider screens
+   ========================================================================== */
+@media (min-width: 768px) {
+  :root { --gutter: 40px; --harlequin-size: 420px 385px; }
+  .entry .tag { width: 360px; }
+  .entry__monogram { font-size: 64px; }
+  .control--lang { right: 24px; top: 24px; }
+  .control--music { right: 24px; bottom: 24px; }
+}
+@media (min-width: 1200px) {
+  :root { --harlequin-size: 480px 440px; }
+}
+
+/* ==========================================================================
+   Reduced motion: no drifting, no breathing — the page simply fades in.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .entry__open::after { animation: none; opacity: .6; }
+  .control--music.is-playing .bars rect { animation: none; }
+  .petals, .entry__dust { display: none; }
+}
