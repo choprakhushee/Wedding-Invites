@@ -2,8 +2,8 @@
 // wind that moves them all.
 //
 // One soft breeze drives everything: a slow ambient sway, an occasional gust
-// (which also carries a few jasmine petals across), and the guest's own
-// scrolling, which stirs the strands a little more.
+// (which also carries a few jasmine, marigold and rose petals across), and the
+// guest's own scrolling, which stirs the strands a little more.
 
 window.TempleCourtyard = (function () {
   "use strict";
@@ -16,10 +16,10 @@ window.TempleCourtyard = (function () {
   let running = false;
 
   // Strands and bells along the top, as a fraction of the screen width from
-  // each side. len is the strand length in drawing units (taller = longer).
+  // each side. len sets a strand's size (270 = the longest).
   const HANGINGS = [
-    { x: 13, len: 270 }, { x: 18.5, len: 190 }, { x: 24, len: 130 },
-    { x: 9.6, bell: true },
+    { x: 13.5, len: 270 }, { x: 19.5, len: 210 }, { x: 25, len: 165 },
+    { x: 9.8, bell: true },
   ];
 
   function buildHangings(box) {
@@ -27,7 +27,7 @@ window.TempleCourtyard = (function () {
       HANGINGS.forEach((h) => {
         const el = document.createElement("div");
         el.className = "wind " + (h.bell ? "hang-bell" : "strand");
-        el.style[side] = h.x + "vw";
+        el.style.left = (side === "left" ? h.x : 100 - h.x) + "vw";
         el.dataset.lean = h.bell ? "-2" : "-4";
         el.dataset.amp = h.bell ? "1.6" : "3";
         el.dataset.period = (h.bell ? 3.4 : 3.8 + Math.random() * 1.6).toFixed(2);
@@ -57,21 +57,37 @@ window.TempleCourtyard = (function () {
     const el = document.createElement("div");
     el.className = "between";
     el.setAttribute("aria-hidden", "true");
-    [150, 210, 150].forEach((len) => {
+    [190, 270, 190].forEach((len) => {
       const s = document.createElement("div");
       s.className = "wind strand strand--between";
       s.dataset.lean = "-4";
       s.dataset.amp = "3.4";
       s.dataset.period = (3.6 + Math.random() * 1.5).toFixed(2);
       s.style.setProperty("--len", len);
-      s.innerHTML = M["jasmine-string"](len);
+      s.innerHTML = '<div class="slot" data-slot="jasmine-string" data-len="' + len + '"></div>';
       el.append(s);
     });
     return el;
   }
 
-  // Each lamp gets three flames at its wick spouts (see kuthuvilakku()).
-  const SPOUTS = [[18.3, 21.5], [50, 23], [81.7, 21.5]];
+  // The thoranam across the top: enough overlapping lengths to span the screen.
+  function buildGarland(box) {
+    const seg = Math.min(440, Math.max(200, innerWidth * 0.34));
+    const count = Math.ceil((innerWidth * 1.04) / (seg * 0.92)) + 1;
+    for (let i = 0; i < count; i++) {
+      const g = document.createElement("div");
+      g.className = "wind garland-seg";
+      g.dataset.lean = "0";
+      g.dataset.amp = "0.7";
+      g.dataset.period = (5 + Math.random() * 2).toFixed(2);
+      g.innerHTML = '<div class="slot" data-slot="thoranam"></div>';
+      box.append(g);
+    }
+  }
+
+  // Each lamp gets five flames, sitting on the wicks of kuthuvilakku.webp
+  // (left %, top % of the lamp image, measured at the base of each flame).
+  const SPOUTS = [[7.3, 25.6], [25.1, 25.8], [48.6, 26.2], [74.2, 26.1], [93.5, 26.3]];
   function addFlames(lamp) {
     SPOUTS.forEach(([x, y]) => {
       const f = document.createElement("span");
@@ -169,6 +185,14 @@ window.TempleCourtyard = (function () {
     const y = window.scrollY;
     wind.impulse = Math.min(1.4, wind.impulse + Math.min(60, Math.abs(y - wind.lastY)) * 0.006);
     wind.lastY = y;
+    veil();
+  }
+
+  // Past the couple, a warm veil settles over the temple view so the event
+  // cards read calmly while the courtyard still glows through.
+  function veil() {
+    const v = document.getElementById("veil");
+    if (v) v.style.opacity = Math.min(0.8, Math.max(0, (window.scrollY - innerHeight * 0.35) / innerHeight)).toFixed(3);
   }
 
   function spawnPetals(count) {
@@ -177,8 +201,9 @@ window.TempleCourtyard = (function () {
     const w = innerWidth, h = innerHeight;
     for (let i = 0; i < count; i++) {
       const p = document.createElement("span");
-      p.className = "petal";
-      p.innerHTML = M.jasmineFlower();
+      const kind = ["jasmine", "jasmine", "marigold", "rose"][(Math.random() * 4) | 0];
+      p.className = "petal petal--" + kind;
+      if (kind === "jasmine") p.innerHTML = M.jasmineFlower();
       box.append(p);
       const y0 = h * (0.05 + Math.random() * 0.5), dur = 7000 + Math.random() * 3500;
       const anim = p.animate([
@@ -196,6 +221,7 @@ window.TempleCourtyard = (function () {
 
   function build() {
     buildHangings(document.getElementById("hangings"));
+    buildGarland(document.getElementById("garland"));
     scatterFlowers(document.getElementById("floor-flowers"));
   }
 
@@ -204,9 +230,11 @@ window.TempleCourtyard = (function () {
     registerAll(document);
     if (reduce) {
       gsap.set(".cflame__lit", { scale: 1 });
-      return;
+      window.addEventListener("scroll", veil, { passive: true });
+      return veil();
     }
     wind.lastY = window.scrollY;
+    veil();
     window.addEventListener("scroll", onScroll, { passive: true });
     running = true;
     requestAnimationFrame(frame);
@@ -215,15 +243,22 @@ window.TempleCourtyard = (function () {
   // The hero moment after the doors: the kolam draws itself, the lamps light.
   function intro() {
     const lines = document.querySelectorAll(".floor__kolam .k-line");
+    const kolamImg = document.querySelector(".floor__kolam .has-image > img");
+    if (kolamImg && !reduce) {
+      // A photographed kolam unfolds from its centre outwards.
+      gsap.fromTo(kolamImg, { clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(72% at 50% 50%)", duration: 2.8, delay: 0.3 });
+    }
     if (reduce) {
-      gsap.set(lines, { strokeDashoffset: 0 });
+      if (lines.length) gsap.set(lines, { strokeDashoffset: 0 });
       gsap.set(".cflame__lit", { scale: 1 });
       return;
     }
-    gsap.timeline()
-      .fromTo(lines, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 2.6, stagger: 0.4 }, 0.2)
-      .fromTo(".floor__kolam .k-dots, .floor__kolam .k-centre", { opacity: 0 }, { opacity: 1, duration: 1.2 }, 2)
-      .fromTo(".cflame__lit", { scale: 0 }, { scale: 1, duration: 1.1, ease: "power2.out", stagger: 0.22 }, 0.4);
+    const tl = gsap.timeline();
+    if (lines.length) {
+      tl.fromTo(lines, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 2.6, stagger: 0.4 }, 0.2)
+        .fromTo(".floor__kolam .k-dots, .floor__kolam .k-centre", { opacity: 0 }, { opacity: 1, duration: 1.2 }, 2);
+    }
+    tl.fromTo(".cflame__lit", { scale: 0 }, { scale: 1, duration: 1.1, ease: "power2.out", stagger: 0.12 }, 0.4);
   }
 
   return { build, start, intro, registerAll, betweenStrands };

@@ -28,7 +28,8 @@
 
   /* Courtyard frame: pillar width and garland height. */
   --pw: clamp(30px, 9vw, 128px);
-  --gh: max(34px, 5vw);
+  --segw: clamp(200px, 34vw, 440px);
+  --gh: calc(var(--segw) * .2);
 
   --font-title: "Cinzel", "Times New Roman", serif;
   --font-script: "Great Vibes", cursive;
@@ -122,9 +123,11 @@ html:not([lang="en"]) .scroll-hint { font-family: var(--font-regional), var(--fo
   z-index: 40;
   overflow: hidden;
   background: var(--night);
-  /* The temple is a 9:16 stage, as large as fits, standing on the bottom edge. */
-  --tw: min(100vw, var(--vh) * 9 / 16);
-  --th: calc(var(--tw) * 16 / 9);
+  /* The temple doorway photo is a 2:3 stage standing on the bottom edge: it
+     fills a phone (trimming the stone at the sides), and sits centred on wider
+     screens. */
+  --tw: min(max(100vw, var(--vh) * .6), var(--vh) * 2 / 3);
+  --th: calc(var(--tw) * 1.5);
 }
 .entry__sky {
   position: absolute;
@@ -145,16 +148,15 @@ html:not([lang="en"]) .scroll-hint { font-family: var(--font-regional), var(--fo
 }
 .temple--front { z-index: 6; pointer-events: none; }
 
-.slot--gopuram { left: 14%; width: 72%; top: 1%; height: 26.5%; }
-.slot--frame { left: 13%; width: 74%; top: 27%; height: 61%; }
+.slot--frame { inset: 0; }
 
 .doorway {
   position: absolute;
-  left: 22.333%;
-  width: 55.334%;
-  top: 34.75%;
-  height: 48.75%;
-  perspective: 900px;
+  left: 17.19%;
+  width: 67.19%;
+  top: 8.07%;
+  height: 83.33%;
+  perspective: 1100px;
 }
 .doorway__glow {
   position: absolute;
@@ -171,6 +173,7 @@ html:not([lang="en"]) .scroll-hint { font-family: var(--font-regional), var(--fo
   will-change: transform;
 }
 .door .slot { inset: 0; }
+.door .slot > img { object-fit: fill; }
 .door--left { left: 0; transform-origin: 0 50%; }
 .door--right { right: 0; transform-origin: 100% 50%; }
 .door__shade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; }
@@ -178,9 +181,9 @@ html:not([lang="en"]) .scroll-hint { font-family: var(--font-regional), var(--fo
 .plaque {
   position: absolute;
   left: 50%;
-  top: 28.1%;
-  height: 5.2%;
-  width: 50%;
+  top: 1.7%;
+  height: 5%;
+  width: 48%;
   translate: -50% 0;
   display: grid;
   place-items: center;
@@ -198,10 +201,10 @@ html:not([lang="en"]) .scroll-hint { font-family: var(--font-regional), var(--fo
 
 .sway { position: absolute; will-change: transform; }
 .sway .slot { inset: 0; }
-.sway--thoranam { left: 17%; width: 66%; top: 34.2%; height: 7%; transform-origin: 50% 0; animation: sway 7s var(--ease) infinite alternate; }
-.sway--leaf-left, .sway--leaf-right { top: 40%; width: 23%; height: 56%; animation: sway-leaf 9s var(--ease) infinite alternate; }
-.sway--leaf-left { left: -6%; transform-origin: 50% 100%; }
-.sway--leaf-right { right: -6%; transform-origin: 50% 100%; animation-delay: -4.5s; }
+.sway--thoranam { left: 14%; width: 72%; top: 7.4%; height: 9.8%; transform-origin: 50% 0; animation: sway 7s var(--ease) infinite alternate; }
+.sway--leaf-left, .sway--leaf-right { bottom: 4%; width: 22%; height: 39.2%; filter: brightness(.62) saturate(.8); animation: sway-leaf 9s var(--ease) infinite alternate; }
+.sway--leaf-left { left: -8%; transform-origin: 50% 100%; }
+.sway--leaf-right { right: -8%; transform-origin: 50% 100%; animation-delay: -4.5s; }
 
 @keyframes sway { from { rotate: -.7deg; } to { rotate: .7deg; } }
 @keyframes sway-leaf { from { rotate: -1.4deg; } to { rotate: 1.2deg; } }
@@ -234,10 +237,10 @@ html:not([lang="en"]) .scroll-hint { font-family: var(--font-regional), var(--fo
 .bell {
   position: absolute;
   left: 50%;
-  width: 14.2%;
-  margin-left: -7.1%;
-  top: 34.75%;
-  height: 17%;
+  width: 10%;
+  margin-left: -5%;
+  top: 7.6%;
+  height: 18.7%;
   transform-origin: 50% 0;
   opacity: .32;
   will-change: transform;
@@ -246,8 +249,8 @@ html:not([lang="en"]) .scroll-hint { font-family: var(--font-regional), var(--fo
 .bell__tap {
   position: absolute;
   left: 50%;
-  top: 40%;
-  width: max(44px, 18%);
+  top: 15%;
+  width: max(44px, 16%);
   height: max(44px, 12%);
   translate: -50% 0;
   border: 0;
@@ -261,17 +264,18 @@ html:not([lang="en"]) .scroll-hint { font-family: var(--font-regional), var(--fo
 .diya {
   position: absolute;
   left: 50%;
-  width: 30%;
-  margin-left: -15%;
-  bottom: 6.5%;
-  height: 13.5%;
+  width: 21%;
+  margin-left: -10.5%;
+  bottom: 6.4%;
+  height: 14%;
   opacity: .5;
 }
 .diya .slot { inset: 0; }
 .diya__glow {
   position: absolute;
   left: 50%;
-  top: 30%;
+  top: 48%;
+  left: 51.5%;
   width: 260%;
   aspect-ratio: 1;
   translate: -50% -50%;
@@ -281,10 +285,10 @@ html:not([lang="en"]) .scroll-hint { font-family: var(--font-regional), var(--fo
 }
 .flame {
   position: absolute;
-  left: 50%;
-  bottom: 56.2%;
-  width: 17%;
-  margin-left: -8.5%;
+  left: 51.5%;
+  bottom: 43%;
+  width: 15%;
+  margin-left: -7.5%;
   aspect-ratio: 40 / 96;
   transform-origin: 50% 100%;
 }
@@ -410,41 +414,64 @@ body.is-dark .fab { opacity: 0; pointer-events: none; }
 .cy-pillar--right { right: 0; }
 .cy-pillar .slot { inset: 0; }
 .cy-pillar .slot > img { object-fit: cover; object-position: 50% 0; }
-.cy-garland { position: absolute; top: 0; left: 0; right: 0; height: var(--gh); }
-.cy-garland .slot { inset: 0; }
-.cy-garland .slot > img { object-fit: cover; object-position: 50% 0; }
+.cy-pillar { filter: drop-shadow(0 0 14px rgba(42, 26, 18, .35)); }
+
+/* The temple tank at golden hour fills the courtyard; a warm veil settles
+   over it as the guest scrolls into the invitation (opacity set by script). */
+.cy-view { position: absolute; inset: 0; }
+.cy-view .slot { inset: 0; }
+.cy-view .slot > img { object-fit: cover; object-position: 33% 100%; }
+.cy-view::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(255, 238, 205, .38), rgba(255, 238, 205, 0) 45%);
+}
+.cy-veil {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--parchment) 82%, transparent), color-mix(in srgb, var(--parchment) 92%, transparent));
+}
+
+/* The thoranam runs across the top in overlapping lengths, each stirring on its own. */
+.cy-garland { position: absolute; top: 0; left: -2vw; right: -2vw; display: flex; justify-content: center; }
+.garland-seg { position: relative; flex: 0 0 auto; width: var(--segw); aspect-ratio: 1400 / 289; margin: 0 calc(var(--segw) * -.04); transform-origin: 50% 0; }
+.garland-seg .slot { inset: 0; }
 
 .wind { will-change: transform; }
 .cy-leaf {
   position: absolute;
   width: var(--lw);
-  aspect-ratio: 94 / 400;
-  top: calc(var(--lw) * -4.255 + var(--gh) * .4);
+  aspect-ratio: 374 / 1000;
+  top: calc(var(--lw) * -2.674 + var(--gh) * .4);
   transform-origin: 50% 100%;
 }
 .cy-leaf .slot { inset: 0; }
+.cy-leaf, .floor__plant { filter: saturate(.82) brightness(.9) hue-rotate(-6deg); }
 .cy-leaf--tl { --lw: clamp(58px, min(15vw, 17vh), 150px); left: calc(var(--pw) * .5 - var(--lw) / 2); transform: rotate(150deg); }
 .cy-leaf--tl2 { --lw: clamp(46px, min(11vw, 13vh), 115px); left: calc(var(--pw) * 1.1 - var(--lw) / 2); transform: rotate(166deg); }
 .cy-leaf--tr { --lw: clamp(58px, min(15vw, 17vh), 150px); right: calc(var(--pw) * .5 - var(--lw) / 2); transform: rotate(-150deg); }
 .cy-leaf--tr2 { --lw: clamp(46px, min(11vw, 13vh), 115px); right: calc(var(--pw) * 1.1 - var(--lw) / 2); transform: rotate(-166deg); }
 
 .strand {
-  --sw: clamp(13px, 2.2vw, 26px);
+  --sw: clamp(18px, 3vw, 34px);
   position: absolute;
-  top: calc(var(--gh) * .45);
-  width: var(--sw);
-  height: calc(var(--sw) * var(--len) / 24);
-  margin: 0 calc(var(--sw) / -2);
+  top: calc(var(--gh) * .12);
+  width: calc(var(--sw) * var(--len) / 270);
+  aspect-ratio: 136 / 1100;
+  translate: -50% 0;
   transform-origin: 50% 0;
 }
+.cy-hangings .strand[style*="right"] { translate: 50% 0; }
 .strand .slot { inset: 0; }
 .strand > svg { display: block; width: 100%; height: 100%; }
 .hang-bell {
   position: absolute;
   top: calc(var(--gh) * .2);
-  width: clamp(26px, 4.6vw, 56px);
-  margin: 0 calc(clamp(26px, 4.6vw, 56px) / -2);
-  aspect-ratio: 80 / 170;
+  width: clamp(28px, 5vw, 60px);
+  translate: -50% 0;
+  aspect-ratio: 271 / 760;
   transform-origin: 50% 0;
 }
 .hang-bell .slot { inset: 0; }
@@ -463,6 +490,9 @@ body.is-dark .fab { opacity: 0; pointer-events: none; }
 }
 .cy-petals { position: absolute; inset: 0; }
 .petal { position: absolute; left: 0; top: 0; width: 15px; height: 15px; will-change: transform, opacity; }
+.petal--marigold, .petal--rose { width: 11px; height: 14px; border-radius: 60% 40% 55% 45% / 65% 55% 45% 35%; }
+.petal--marigold { background: radial-gradient(circle at 40% 30%, #ffc44d, #f28a12 70%); }
+.petal--rose { background: radial-gradient(circle at 40% 30%, #f06a8a, #b3163c 75%); }
 .petal svg, .floor-flower svg { display: block; width: 100%; height: 100%; }
 .jf-petals { fill: #fffdf6; stroke: color-mix(in srgb, var(--sandal-deep), transparent 30%); stroke-width: .6; }
 .jf-eye { fill: var(--turmeric); }
@@ -525,20 +555,35 @@ body.is-dark .fab { opacity: 0; pointer-events: none; }
 }
 .panel--ivory { --panel-bg: var(--ivory); color: var(--stone); }
 .panel--red { --panel-bg: var(--kumkum); color: var(--ivory); }
-.zari { padding: 42px clamp(18px, 5vw, 40px) 34px; }
+.zari {
+  --band: var(--kumkum);
+  padding: 52px clamp(22px, 6vw, 44px) 46px;
+  border-color: var(--gold);
+  box-shadow: inset 0 0 0 1px var(--gold-light), 0 18px 44px -20px rgba(42, 26, 18, .45);
+  /* A Kanjeevaram border: a silk band with a fine gold rule along it. */
+  background:
+    linear-gradient(var(--gold), var(--gold)) 0 15px / 100% 1.5px no-repeat,
+    linear-gradient(var(--gold), var(--gold)) 0 calc(100% - 15px) / 100% 1.5px no-repeat,
+    linear-gradient(var(--band), var(--band)) top / 100% 19px no-repeat,
+    linear-gradient(var(--band), var(--band)) bottom / 100% 19px no-repeat,
+    linear-gradient(var(--band), var(--band)) left / 6px 100% no-repeat,
+    linear-gradient(var(--band), var(--band)) right / 6px 100% no-repeat,
+    var(--panel-bg);
+}
+.panel--red.zari { --band: var(--peacock); }
 .zari::before, .zari::after {
   content: "";
   position: absolute;
-  left: 9px;
-  right: 9px;
-  height: 7px;
+  left: 6px;
+  right: 6px;
+  height: 10px;
   background: var(--gold);
-  -webkit-mask: var(--temple-border) repeat-x 0 0 / 11px 7px;
-  mask: var(--temple-border) repeat-x 0 0 / 11px 7px;
+  -webkit-mask: var(--temple-border) repeat-x 0 0 / 14px 10px;
+  mask: var(--temple-border) repeat-x 0 0 / 14px 10px;
   pointer-events: none;
 }
-.zari::before { top: 9px; }
-.zari::after { bottom: 9px; transform: scaleY(-1); }
+.zari::before { top: 19px; }
+.zari::after { bottom: 19px; transform: scaleY(-1); }
 :root { --temple-border: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath d='M0 0h11L5.5 7z'/%3E%3C/svg%3E"); }
 
 .kicker {
@@ -583,37 +628,41 @@ body.is-dark .fab { opacity: 0; pointer-events: none; }
   overflow: clip;
 }
 .hero:focus { outline: none; }
-.hero__view { position: absolute; left: 0; right: 0; bottom: calc(var(--floor-h) - 6px); height: max(140px, min(37.5vw, 46vh)); }
-.hero__view .slot { inset: 0; }
 .floor {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   height: var(--floor-h);
-  background: linear-gradient(to bottom, var(--floor-top), var(--floor-bottom) 70%, var(--parchment));
+  border-top: 5px solid color-mix(in srgb, var(--sandal), #fff 30%);
+  /* Warm sandstone, lit from the lamps, fading into the page below. */
+  background:
+    radial-gradient(60% 80% at 50% 20%, rgba(255, 214, 140, .45), transparent 70%),
+    linear-gradient(to bottom, #e3c08c, #cf9f66 70%, var(--parchment));
+  box-shadow: 0 -10px 24px -12px rgba(42, 26, 18, .4);
 }
 .floor > * { position: absolute; }
-.floor__kolam { left: 50%; bottom: 14%; width: min(76vw, 540px); aspect-ratio: 400 / 140; translate: -50% 0; }
+.floor__kolam { left: 50%; bottom: 4%; width: min(86vw, 640px); aspect-ratio: 1; translate: -50% 0; transform: perspective(900px) rotateX(64deg); transform-origin: 50% 100%; }
+.floor__kolam .slot { inset: 0; }
 .floor__flowers { inset: 0; }
 .floor-flower { position: absolute; width: calc(17px * var(--s)); aspect-ratio: 1; }
 .floor-flower--pink .jf-petals { fill: #f1c2c0; }
-.floor__plant { left: calc(var(--pw) * .1 - var(--lw) / 2); bottom: 55%; --lw: clamp(56px, min(14vw, 15vh), 130px); width: var(--lw); aspect-ratio: 94 / 400; transform-origin: 50% 100%; transform: rotate(18deg); }
+.floor__plant { left: calc(var(--pw) * .1 - var(--lw) / 2); bottom: 55%; --lw: clamp(56px, min(14vw, 15vh), 130px); width: var(--lw); aspect-ratio: 374 / 1000; transform-origin: 50% 100%; transform: rotate(18deg); }
 .floor__plant--2 { --lw: clamp(46px, min(11vw, 12vh), 105px); transform: rotate(38deg); }
 .floor__plant .slot { inset: 0; }
-.lamp { bottom: 6%; height: var(--lh); aspect-ratio: 120 / 400; cursor: pointer; }
+.lamp { bottom: 6%; height: var(--lh); aspect-ratio: 288 / 1000; cursor: pointer; filter: drop-shadow(0 8px 10px rgba(42, 26, 18, .35)); }
 .lamp .slot { inset: 0; }
 .lamp--left { left: calc(var(--pw) * .35); }
 .lamp--right { right: calc(var(--pw) * .35); }
-.floor__urli { left: calc(var(--pw) * .35 + var(--lh) * .2); bottom: 4%; width: clamp(112px, 29vw, 300px); aspect-ratio: 200 / 110; }
-.floor__kalasam { right: calc(var(--pw) * .35 + var(--lh) * .2); bottom: 7%; width: clamp(58px, 14vw, 150px); aspect-ratio: 120 / 170; }
+.floor__urli { left: calc(var(--pw) * .35 + var(--lh) * .2); bottom: 3%; width: clamp(112px, 29vw, 300px); aspect-ratio: 2; filter: drop-shadow(0 6px 8px rgba(42, 26, 18, .3)); }
+.floor__kalasam { right: calc(var(--pw) * .35 + var(--lh) * .2); bottom: 6%; width: clamp(64px, 15vw, 160px); aspect-ratio: 625 / 720; filter: drop-shadow(0 6px 8px rgba(42, 26, 18, .3)); }
 .floor__kalasam .slot { inset: 0; }
-.floor__lotus { right: calc(var(--pw) * .35 + var(--lh) * .2 + clamp(58px, 14vw, 150px) * .85); bottom: 2%; width: clamp(60px, 16vw, 170px); aspect-ratio: 140 / 90; }
+.floor__lotus { right: calc(var(--pw) * .35 + var(--lh) * .2 + clamp(64px, 15vw, 160px) * .8); bottom: 1%; width: clamp(56px, 14vw, 150px); aspect-ratio: 640 / 552; }
 
 .cflame {
   position: absolute;
-  width: 11%;
-  margin-left: -5.5%;
+  width: 8%;
+  margin-left: -4%;
   aspect-ratio: 40 / 96;
   translate: 0 -100%;
   transform-origin: 50% 100%;
@@ -734,8 +783,9 @@ body.is-dark .fab { opacity: 0; pointer-events: none; }
   text-align: center;
 }
 .events__list { display: flex; flex-direction: column; }
-.between { display: flex; justify-content: space-around; height: 120px; margin: 0 14%; }
-.strand--between { --sw: 13px; position: relative; top: -4px; margin: 0; }
+.between { display: flex; justify-content: space-around; height: 150px; margin: 0 16%; }
+.strand--between { --sw: 34px; position: relative; top: -6px; translate: none; }
+.strand--between .slot { inset: 0; }
 .event { text-align: center; }
 .event__name { margin: 4px 0 0; font: 600 clamp(19px, 5.6vw, 25px)/1.25 var(--font-title); letter-spacing: .08em; text-transform: uppercase; color: var(--kumkum); }
 .event--muhurtham .event__name { color: var(--gold-light); }

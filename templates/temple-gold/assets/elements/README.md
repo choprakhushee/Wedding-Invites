@@ -1,41 +1,42 @@
 # Temple Gold elements
 
-Drop a file here with one of these exact names and the invitation uses it
-instead of the built-in drawing. Leave a name out and the built-in drawing is
-used. No code changes needed.
+Every picture on the invitation comes from this folder. To swap one, save your
+new picture here with **exactly the same file name** (`.webp` or `.png`) and it
+is used automatically. No code changes are needed. Delete a file and a simple
+built-in drawing is used instead.
 
-Export from Canva as a **transparent PNG** at the size shown (or larger, same
-shape). Each image is fitted inside its spot without stretching.
+Use transparent PNG or WebP, the same shape as the one you replace (or close to
+it). Keep each file under about 150 KB so the invitation stays fast on 4G
+(squoosh.app makes WebP files small).
 
-| File name                | What it is                                   | Shape (width × height) |
-|--------------------------|----------------------------------------------|------------------------|
-| `gopuram.png`            | Temple tower above the doors                 | 1026 × 672             |
-| `temple-frame.png`       | Stone pillars, lintel and step round the doors (doorway left see-through) | 999 × 1464 |
-| `temple-door-left.png`   | Left door, hinge on the left                 | 375 × 1173             |
-| `temple-door-right.png`  | Right door, hinge on the right               | 375 × 1173             |
-| `thoranam.png`           | Mango-leaf garland over the doorway          | 954 × 180              |
-| `banana-leaf-left.png`   | Banana leaf, left of the doors (stalk at bottom centre) | 282 × 1200  |
-| `banana-leaf-right.png`  | Banana leaf, right of the doors              | 282 × 1200             |
-| `bell.png`               | Temple bell with chain (chain at top centre) | 240 × 510              |
-| `diya.png`               | Brass lamp, unlit, wick tip at 50% across and 44% down | 600 × 480    |
+The current set was made with Canva's image generator and cut out with Canva's
+background remover.
 
-**The courtyard** (behind the doors):
+**Entry (lamp, bell and doors)**
 
-| File name                | What it is                                   | Shape (width × height) |
-|--------------------------|----------------------------------------------|------------------------|
-| `pillar-left.png`        | Carved stone pillar, left edge (capital at the top; it is cropped from the bottom) | 300 × 3000 |
-| `pillar-right.png`       | Carved stone pillar, right edge              | 300 × 3000             |
-| `garland.png`            | Leaf-and-jasmine garland along the top edge (repeats nicely if wide) | 3000 × 150 |
-| `jasmine-string.png`     | One hanging jasmine strand (hangs from top centre; it sways) | 72 × 900 |
-| `kuthuvilakku.png`       | Tall standing brass lamp, unlit. Wick tips at 18%, 50% and 82% across, about 22% down | 360 × 1200 |
-| `urli.png`               | Brass bowl with floating flowers             | 600 × 330              |
-| `kalasam.png`            | Brass pot with mango leaves and coconut      | 360 × 510              |
-| `lotus.png`              | Pink lotus on its leaf                       | 420 × 270              |
-| `temple-view.png`        | Distant temple tank, palms and gopuram (soft and misty; bottom edge is the water's edge) | 2400 × 900 |
-| `kolam.svg`              | Floor kolam seen in perspective (an SVG draws itself line by line only if it is the built-in one) | 1200 × 420 |
+| File | What it is | Notes |
+|---|---|---|
+| `diya.webp` | Small brass lamp on the threshold | The flame is drawn on the wick at 52% across, 56% down |
+| `bell.webp` | Temple bell on its chain | Hangs from the top centre and swings |
+| `temple-frame.webp` | Stone doorway, with the door area cut out (see-through) | 2 : 3 shape; the doors fill 17–84% across, 8–91% down |
+| `temple-door-left.webp`, `temple-door-right.webp` | The two door leaves | They swing open on their outer edges |
+| `thoranam.webp` | Mango-leaf and marigold garland | Also runs along the top of the courtyard |
+| `banana-leaf-left.webp`, `banana-leaf-right.webp` | Banana leaf, stalk at the bottom | Used at the doors and in the courtyard |
 
-The banana leaves and the bell above are reused in the courtyard.
+**Courtyard (behind the doors)**
 
-To use a different file name or format (e.g. WebP), add it to `"elements"` in
-the couple's `wedding.json`, e.g. `"elements": { "gopuram": "my-gopuram.webp" }`
-(that path is relative to the couple's folder).
+| File | What it is | Notes |
+|---|---|---|
+| `temple-view.webp` | The temple tank and gopuram behind everything | A normal photo (not see-through), landscape |
+| `pillar-left.webp`, `pillar-right.webp` | Carved stone pillars at the edges | Very tall and thin (capital at the top), cropped from the bottom |
+| `jasmine-string.webp` | One hanging jasmine and marigold strand | Hangs from the top centre and sways |
+| `kuthuvilakku.webp` | Tall standing brass lamp | Five flames are drawn on its wicks, about 26% down |
+| `urli.webp` | Brass bowl of floating flowers | |
+| `kalasam.webp` | Brass pot with mango leaves and coconut | |
+| `lotus.webp` | Pink lotus on its leaf | |
+| `kolam.webp` | Round kolam seen from above | Laid on the floor in perspective; it unfolds from the centre |
+
+To use a different file name or a picture just for one couple, add it to
+`"elements"` in that couple's `wedding.json`, e.g.
+`"elements": { "temple-view": "photos/our-temple.webp" }` (relative to the
+couple's folder).

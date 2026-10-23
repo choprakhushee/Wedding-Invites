@@ -277,8 +277,8 @@
     const entry = $("#entry");
     if (!entry) return;
     const d = $("#diya").getBoundingClientRect();
-    entry.style.setProperty("--fx", (d.left + d.width / 2).toFixed(1) + "px");
-    entry.style.setProperty("--fy", (d.top + d.height * 0.3).toFixed(1) + "px");
+    entry.style.setProperty("--fx", (d.left + d.width * 0.515).toFixed(1) + "px");
+    entry.style.setProperty("--fy", (d.top + d.height * 0.5).toFixed(1) + "px");
   }
 
   // A pendulum that settles: each swing smaller and a little slower.
@@ -404,9 +404,9 @@
     setupLanguage();
     if (C.setupMusic($("#audio"))) C.bindMusicButton($("#music"));
     window.TempleCourtyard.build();
+    renderContent();
     C.fillSlots($("#courtyard"), document.body.dataset.elements, M);
     C.fillSlots($("#site"), document.body.dataset.elements, M);
-    renderContent();
     setupEntry();
     applyText();
     window.TempleCourtyard.start();

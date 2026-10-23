@@ -86,21 +86,21 @@ window.InviteCore = (function () {
   }
 
   // Element slots: every slot starts with its built-in SVG, then switches to
-  // assets/elements/<slot>.png if that file exists (or the file named in
-  // config.elements, e.g. "gopuram": "gopuram.webp").
+  // assets/elements/<slot>.webp (or .png) if that file exists, or to the file
+  // named in config.elements, e.g. "gopuram": "my-gopuram.jpg".
   function fillSlots(root, base, fallbacks) {
     const overrides = state.config.elements || {};
     root.querySelectorAll("[data-slot]").forEach((el) => {
       const name = el.dataset.slot;
       if (fallbacks[name]) el.innerHTML = fallbacks[name](el);
-      const file = overrides[name] || name + (el.dataset.ext || ".png");
       // Files named in config.elements are relative to the couple's folder.
-      const src = overrides[name] ? file : base + file;
+      const tries = overrides[name] ? [overrides[name]] : [base + name + ".webp", base + name + ".png"];
       const img = new Image();
       img.decoding = "async";
       img.alt = "";
       img.onload = () => { el.innerHTML = ""; el.append(img); el.classList.add("has-image"); };
-      img.src = src;
+      img.onerror = () => { if (tries.length) img.src = tries.shift(); };
+      img.src = tries.shift();
     });
   }
 

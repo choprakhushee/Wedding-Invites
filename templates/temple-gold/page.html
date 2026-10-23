@@ -24,13 +24,12 @@
     <div class="entry__sky"></div>
 
     <div class="temple" aria-hidden="true">
-      <div class="slot slot--gopuram" data-slot="gopuram"></div>
-      <div class="slot slot--frame" data-slot="temple-frame"></div>
       <div class="doorway">
         <div class="doorway__glow"></div>
         <div class="door door--left"><div class="slot" data-slot="temple-door-left"></div><span class="door__shade"></span></div>
         <div class="door door--right"><div class="slot" data-slot="temple-door-right"></div><span class="door__shade"></span></div>
       </div>
+      <div class="slot slot--frame" data-slot="temple-frame"></div>
       <div class="plaque"><span class="plaque__names" data-couple="short"></span></div>
       <div class="sway sway--thoranam"><div class="slot slot--thoranam" data-slot="thoranam"></div></div>
       <div class="sway sway--leaf-left"><div class="slot slot--leaf" data-slot="banana-leaf-left"></div></div>
@@ -60,10 +59,12 @@
   <!-- The courtyard frame: pillars, garland, jasmine strands and bells.
        It stays in place while the invitation scrolls through the middle. -->
   <div class="courtyard" id="courtyard" aria-hidden="true">
+    <div class="cy-view"><div class="slot" data-slot="temple-view"></div></div>
+    <div class="cy-veil" id="veil"></div>
     <div class="cy-pillar cy-pillar--left"><div class="slot" data-slot="pillar-left"></div></div>
     <div class="cy-pillar cy-pillar--right"><div class="slot" data-slot="pillar-right"></div></div>
     <div class="cy-hangings" id="hangings"></div>
-    <div class="cy-garland"><div class="slot" data-slot="garland"></div></div>
+    <div class="cy-garland" id="garland"></div>
     <div class="wind cy-leaf cy-leaf--tl" data-base="150" data-amp="2.2" data-period="5.6" data-lean="-3"><div class="slot" data-slot="banana-leaf-left"></div></div>
     <div class="wind cy-leaf cy-leaf--tl2" data-base="166" data-amp="2.8" data-period="4.7" data-lean="-3.5"><div class="slot" data-slot="banana-leaf-left"></div></div>
     <div class="wind cy-leaf cy-leaf--tr" data-base="-150" data-amp="2.2" data-period="5.9" data-lean="-3"><div class="slot" data-slot="banana-leaf-right"></div></div>
@@ -74,11 +75,10 @@
   <main class="site" id="site">
     <!-- 3–5. Invocation, greeting and the couple, standing in the courtyard. -->
     <section class="hero" id="couple" aria-labelledby="couple-title">
-      <div class="hero__view" aria-hidden="true"><div class="slot" data-slot="temple-view"></div></div>
       <div class="floor" aria-hidden="true">
         <div class="wind floor__plant" data-base="18" data-amp="2.5" data-period="5.2" data-lean="2.5"><div class="slot" data-slot="banana-leaf-left"></div></div>
         <div class="wind floor__plant floor__plant--2" data-base="38" data-amp="3" data-period="4.4" data-lean="3"><div class="slot" data-slot="banana-leaf-left"></div></div>
-        <div class="slot floor__kolam" data-slot="kolam" data-ext=".svg"></div>
+        <div class="floor__kolam"><div class="slot" data-slot="kolam"></div></div>
         <div class="floor__flowers" id="floor-flowers"></div>
         <div class="lamp lamp--left"><div class="slot" data-slot="kuthuvilakku"></div></div>
         <div class="slot floor__urli" data-slot="urli"></div>
