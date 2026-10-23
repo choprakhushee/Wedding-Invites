@@ -271,6 +271,7 @@ body::after {
 }
 .door {
   position: absolute;
+  overflow: hidden;
   top: 0;
   width: 50%;
   height: 100%;
@@ -405,9 +406,50 @@ body::after {
 .lantern svg { display: block; width: 100%; height: auto; }
 .lantern--l { left: 7%; }
 .lantern--r { right: 7%; }
-.lantern__swing { transform-origin: 50% 0; animation: sway 6s var(--ease) infinite alternate; }
-.lantern--r .lantern__swing { animation-delay: -3s; }
-@keyframes sway { from { transform: rotate(-2.4deg); } to { transform: rotate(2.4deg); } }
+.lantern__kick { transform-origin: 50% 0; }
+.lantern__swing { position: relative; transform-origin: 50% 0; animation: sway 2.8s var(--ease) infinite alternate; }
+@keyframes sway { from { transform: rotate(-4.5deg); } to { transform: rotate(4.5deg); } }
+.lantern svg { position: relative; }
+.lantern__glow { /* warm halo around the glass, flickering like a flame */
+  position: absolute;
+  left: -70%;
+  right: -70%;
+  top: 42%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 214, 140, .75) 0%, rgba(255, 190, 110, .32) 32%, rgba(255, 170, 90, 0) 68%);
+  mix-blend-mode: screen;
+  animation: flicker 2.2s steps(1, end) infinite;
+  pointer-events: none;
+}
+.lantern__beam { /* a faint cone of light falling below the lamp */
+  position: absolute;
+  left: -120%;
+  right: -120%;
+  top: 72%;
+  height: 260%;
+  background: radial-gradient(ellipse 45% 100% at 50% 0%, rgba(255, 224, 170, .22), rgba(255, 224, 170, 0) 70%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+@keyframes flicker {
+  0% { opacity: .95; } 12% { opacity: .78; } 20% { opacity: 1; } 34% { opacity: .86; }
+  47% { opacity: .98; } 58% { opacity: .74; } 66% { opacity: .92; } 80% { opacity: .83; } 92% { opacity: 1; }
+}
+.lantern--room { top: -10px; z-index: 3; width: clamp(34px, 9vw, 60px); }
+.lantern--room.lantern--l { left: 9%; }
+.lantern--room.lantern--r { right: 9%; }
+
+/* String lights */
+.fairy { position: absolute; top: 0; left: 0; right: 0; z-index: 4; height: clamp(40px, 10vw, 90px); pointer-events: none; }
+.fairy svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.fairy__bulbs circle { fill: #FFE6B0; filter: drop-shadow(0 0 3px rgba(255, 200, 120, .95)); animation: twinkle 2.4s var(--ease) infinite alternate; }
+@keyframes twinkle { from { opacity: .3; } to { opacity: 1; } }
+.couple__lights { top: clamp(30px, 7vw, 60px); }
+.room__lights { z-index: 2; }
+
+/* Sparkles: one canvas of drifting gold dust over the page */
+.sparkles { position: fixed; inset: 0; z-index: 40; width: 100%; height: 100%; pointer-events: none; }
 
 .couple__arch { z-index: 3; width: min(78vw, 400px); margin-top: 4vh; }
 .couple .arch__bloom { width: 17%; height: auto; }
@@ -684,7 +726,7 @@ body::after {
   .entry__open::after { animation: none; opacity: .6; }
   .control--music.is-playing .bars rect { animation: none; }
   .petals, .entry__dust { display: none; }
-  .lantern__swing, .scroll-hint i { animation: none; }
+  .lantern__swing, .scroll-hint i, .lantern__glow, .fairy__bulbs circle { animation: none; }
 }
 
 /* ==========================================================================
@@ -710,7 +752,7 @@ body::after {
 .room__pilaster--l { left: 0; box-shadow: inset -1px 0 0 var(--gold), 4px 0 12px rgba(0, 0, 0, .25); }
 .room__pilaster--r { right: 0; box-shadow: inset 1px 0 0 var(--gold), -4px 0 12px rgba(0, 0, 0, .25); }
 .has-photo .room__pilaster { display: block; }
-.door__half { width: 200%; max-width: none; height: 100%; object-fit: cover; }
+.door .door__half { width: 200%; max-width: none; height: 100%; object-fit: cover; }
 .door--right .door__half { margin-left: -100%; }
 
 /* Rooms with a painting: the card sits low so the scene shows above it. */

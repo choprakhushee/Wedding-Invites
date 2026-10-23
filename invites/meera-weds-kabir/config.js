@@ -159,7 +159,7 @@ window.WEDDING = {
   /* ---------- Music (starts when the guest taps to open) ----------
      Use only music you have the rights to. MP3, ideally under 2 MB.        */
   music: {
-    src: "assets/music/sample-festive.mp3",
+    src: "",   // e.g. "assets/music/our-song.mp3" — leave empty for no music
     volume: 0.6
   },
 

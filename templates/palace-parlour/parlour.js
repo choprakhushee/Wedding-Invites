@@ -483,6 +483,79 @@
     return layer;
   }
 
+  // A hanging lamp: the outer box swings when the guest scrolls, the inner one
+  // sways on its own, and the glass glows and flickers like a flame.
+  function lantern(className) {
+    const l = el("div", "lantern " + className, { "aria-hidden": "true" });
+    const kick = el("div", "lantern__kick");
+    const swing = el("div", "lantern__swing");
+    swing.style.animationDelay = (-Math.random() * 3).toFixed(2) + "s";
+    const glow = el("div", "lantern__glow");
+    glow.style.animationDelay = (-Math.random() * 2).toFixed(2) + "s";
+    swing.append(el("div", "lantern__beam"), glow);
+    swing.insertAdjacentHTML("beforeend", M.lanternSVG());
+    kick.appendChild(swing);
+    l.appendChild(kick);
+    return l;
+  }
+
+  // Swags of tiny lights across the top of a scene, each bulb twinkling on its own beat.
+  function fairyLights(className) {
+    const swags = 3, perSwag = 9, w = 300, h = 46;
+    let wires = "", bulbs = "";
+    for (let i = 0; i < swags; i++) {
+      const x0 = (i * w) / swags, x1 = ((i + 1) * w) / swags, sag = h - 8;
+      wires += `M${x0} 4 Q${(x0 + x1) / 2} ${sag * 2 - 4} ${x1} 4 `;
+      for (let k = 1; k < perSwag; k++) {
+        const t = k / perSwag, x = x0 + (x1 - x0) * t;
+        const y = (1 - t) * (1 - t) * 4 + 2 * (1 - t) * t * (sag * 2 - 4) + t * t * 4;
+        const d = (-Math.random() * 3).toFixed(2), dur = (1.6 + Math.random() * 1.6).toFixed(2);
+        bulbs += `<circle cx="${x.toFixed(1)}" cy="${(y + 3).toFixed(1)}" r="2.6" style="animation-delay:${d}s;animation-duration:${dur}s"/>`;
+      }
+    }
+    const holder = el("div", "fairy " + (className || ""), { "aria-hidden": "true" });
+    holder.innerHTML = `<svg viewBox="0 0 ${w} ${h + 6}" preserveAspectRatio="none"><path d="${wires}" fill="none" stroke="#3B2A1E" stroke-width=".7" vector-effect="non-scaling-stroke"/><g class="fairy__bulbs">${bulbs}</g></svg>`;
+    return holder;
+  }
+
+  // Gold motes drifting up through the whole page, like dust in lamplight.
+  function startSparkles() {
+    if (reduceMotion) return;
+    const canvas = el("canvas", "sparkles", { "aria-hidden": "true" });
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext("2d");
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let w = 0, h = 0;
+    function size() {
+      w = window.innerWidth; h = window.innerHeight;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    size();
+    window.addEventListener("resize", size);
+    const motes = Array.from({ length: w < 600 ? 26 : 40 }, () => ({
+      x: Math.random() * w, y: Math.random() * h, r: 0.7 + Math.random() * 1.8,
+      vy: -(0.15 + Math.random() * 0.35), vx: (Math.random() - 0.5) * 0.2, p: Math.random() * 6.3, s: 0.02 + Math.random() * 0.03,
+    }));
+    let last = 0;
+    (function frame(now) {
+      requestAnimationFrame(frame);
+      if (document.hidden || now - last < 30) return; // ~30 fps is plenty for drifting dust
+      last = now;
+      ctx.clearRect(0, 0, w, h);
+      for (const m of motes) {
+        m.x += m.vx; m.y += m.vy; m.p += m.s;
+        if (m.y < -8) { m.y = h + 8; m.x = Math.random() * w; }
+        const a = 0.25 + 0.55 * Math.max(0, Math.sin(m.p));
+        const g = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, m.r * 3);
+        g.addColorStop(0, "rgba(255,236,190," + a + ")");
+        g.addColorStop(1, "rgba(227,197,142,0)");
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(m.x, m.y, m.r * 3, 0, Math.PI * 2); ctx.fill();
+      }
+    })(0);
+  }
+
   // An arch panel: cusped top + box. frame/face: maroon, green, linen.
   function archCard(frame, face, className, flat) {
     const card = el("div", "arch arch--frame-" + frame + " arch--face-" + face + (flat ? " arch--flat" : "") + (className ? " " + className : ""));
@@ -592,13 +665,8 @@
       d.innerHTML = M.drapeSVG();
       return d;
     });
-    const lanterns = ["l", "r"].map((s) => {
-      const l = el("div", "lantern lantern--" + s, { "aria-hidden": "true" });
-      const swing = el("div", "lantern__swing");
-      swing.innerHTML = M.lanternSVG();
-      l.appendChild(swing);
-      return l;
-    });
+    const lanterns = ["l", "r"].map((s) => lantern("lantern--" + s));
+    const garland = fairyLights("couple__lights");
 
     const a = archCard("green", "linen", "couple__arch");
     a.crown.appendChild(deco(motif("bloom-stem"), "arch__bloom"));
@@ -619,7 +687,7 @@
     const hint = el("div", "scroll-hint", { "aria-hidden": "true" });
     hint.append(text("span", "", () => word("scrollHint")), el("i"));
 
-    stage.append(wall, photo, border, drapes[0], drapes[1], lanterns[0], lanterns[1], a.card, sprigs[0], sprigs[1], hint);
+    stage.append(wall, photo, border, garland, drapes[0], drapes[1], lanterns[0], lanterns[1], a.card, sprigs[0], sprigs[1], hint);
     scene.appendChild(stage);
     return { scene, wall, photo, border, drapes, lanterns, arch: a.card, kicker, writes: [first, amp, second], together, date, more, sprigs, hint };
   }
@@ -804,7 +872,8 @@
       parts.push(actions, menu);
       a.inner.append(...parts);
 
-      stage.append(wall, photo, pilasters[0], pilasters[1], sprigs[0], sprigs[1], a.card, shade);
+      const lamps = [lantern("lantern--room lantern--l"), lantern("lantern--room lantern--r")];
+      stage.append(wall, photo, fairyLights("room__lights"), pilasters[0], pilasters[1], lamps[0], lamps[1], sprigs[0], sprigs[1], a.card, shade);
       room.appendChild(stage);
       wrap.appendChild(room);
 
@@ -931,6 +1000,18 @@
       });
     }
 
+    // Lanterns swing with the guest's scroll and settle again.
+    const kicks = gsap.utils.toArray(".lantern__kick");
+    let settle = null;
+    ScrollTrigger.create({
+      onUpdate(self) {
+        const angle = gsap.utils.clamp(-9, 9, -self.getVelocity() / 260);
+        gsap.to(kicks, { rotation: angle, duration: 0.8, ease: EASE, overwrite: true });
+        clearTimeout(settle);
+        settle = setTimeout(() => gsap.to(kicks, { rotation: 0, duration: 1.4, ease: EASE, overwrite: true }), 140);
+      },
+    });
+
     bindings.push(() => ScrollTrigger.refresh());
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => ScrollTrigger.refresh());
     window.addEventListener("load", () => ScrollTrigger.refresh());
@@ -941,6 +1022,7 @@
     if (revealed) return;
     revealed = true;
     if (parts.names) parts.names.play();
+    startSparkles();
     const heading = document.getElementById("couple-names");
     if (heading) heading.focus({ preventScroll: true });
     document.dispatchEvent(new CustomEvent("parlour:opened"));
