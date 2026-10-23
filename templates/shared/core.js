@@ -92,7 +92,7 @@ window.InviteCore = (function () {
     const overrides = state.config.elements || {};
     root.querySelectorAll("[data-slot]").forEach((el) => {
       const name = el.dataset.slot;
-      if (fallbacks[name]) el.innerHTML = fallbacks[name]();
+      if (fallbacks[name]) el.innerHTML = fallbacks[name](el);
       const file = overrides[name] || name + (el.dataset.ext || ".png");
       // Files named in config.elements are relative to the couple's folder.
       const src = overrides[name] ? file : base + file;
@@ -113,8 +113,11 @@ window.InviteCore = (function () {
     if (!m.src) return false;
     sound.audio = audioEl;
     sound.volume = m.volume == null ? 0.5 : m.volume;
-    audioEl.src = m.src;
+    // Only offer the music button once the file is known to load.
+    audioEl.preload = "metadata";
+    audioEl.addEventListener("loadedmetadata", () => { sound.ready = true; refreshButtons(); });
     audioEl.addEventListener("error", () => { sound.audio = null; refreshButtons(); });
+    audioEl.src = m.src;
     return true;
   }
 
@@ -154,7 +157,7 @@ window.InviteCore = (function () {
 
   function refreshButtons() {
     sound.buttons.forEach((btn) => {
-      btn.hidden = !sound.audio;
+      btn.hidden = !sound.audio || !sound.ready;
       btn.classList.toggle("is-muted", sound.muted);
       btn.setAttribute("aria-pressed", String(!sound.muted));
       btn.setAttribute("aria-label", ui(sound.muted ? "music_on" : "music_off"));
@@ -190,8 +193,43 @@ window.InviteCore = (function () {
     });
   }
 
+  // ---- Calendar ------------------------------------------------------------
+
+  // A one-event .ics file. Times in wedding.json are local wall-clock times;
+  // "timezone" (e.g. "+05:30") turns them into UTC for the calendar.
+  function icsFor(ev, title) {
+    const tz = state.config.timezone || "+05:30";
+    const stamp = (date, time) => new Date(date + "T" + (time || "00:00") + ":00" + tz)
+      .toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+    const esc = (s) => String(s || "").replace(/\\/g, "\\\\").replace(/([,;])/g, "\\$1").replace(/\n/g, "\\n");
+    const start = stamp(ev.date, ev.start);
+    const end = ev.end ? stamp(ev.date, ev.end) : stamp(ev.date, ev.start).replace(/T(\d\d)/, (m, h) => "T" + String(Math.min(23, +h + 2)).padStart(2, "0"));
+    const lines = [
+      "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Wedding Invites//EN", "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
+      "BEGIN:VEVENT",
+      "UID:" + (ev.id || start) + "-" + start + "@wedding-invite",
+      "DTSTAMP:" + new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, ""),
+      "DTSTART:" + start, "DTEND:" + end,
+      "SUMMARY:" + esc(title),
+      "LOCATION:" + esc(t(ev.venue, "en")),
+      "DESCRIPTION:" + esc([t(ev.dress_code, "en"), ev.map].filter(Boolean).join("\n")),
+      "END:VEVENT", "END:VCALENDAR",
+    ];
+    return lines.join("\r\n");
+  }
+
+  function downloadIcs(ev, title) {
+    const blob = new Blob([icsFor(ev, title)], { type: "text/calendar;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = (ev.id || "event") + ".ics";
+    document.body.append(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  }
+
   return {
-    state, loadConfig, t, ui, setLang, onLangChange, regionalLang, loadFont, guestName,
+    state, loadConfig, icsFor, downloadIcs, t, ui, setLang, onLangChange, regionalLang, loadFont, guestName,
     fillSlots, setupMusic, startMusic, setMuted, bindMusicButton, chime, store,
     get lang() { return state.lang; },
     get config() { return state.config; },

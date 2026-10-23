@@ -4,32 +4,56 @@
     "description": "With the blessings of our elders, we invite you to our wedding in Madurai on Friday, 5 February 2027.",
     "share_image": "photos/share.jpg"
   },
-
   "couple": {
     "first": "bride",
     "bride": {
-      "name": { "en": "Ananya", "ta": "அனன்யா" },
-      "full_name": { "en": "Ananya Venkatesh", "ta": "அனன்யா வெங்கடேஷ்" },
-      "parents": { "en": "Smt. Lakshmi & Shri Venkatesh Iyer", "ta": "திருமதி லக்ஷ்மி & திரு வெங்கடேஷ் ஐயர்" },
-      "native_place": { "en": "of Madurai", "ta": "மதுரை" }
+      "name": {
+        "en": "Ananya",
+        "ta": "அனன்யா"
+      },
+      "full_name": {
+        "en": "Ananya Venkatesh",
+        "ta": "அனன்யா வெங்கடேஷ்"
+      },
+      "parents": {
+        "en": "Smt. Lakshmi & Shri Venkatesh Iyer",
+        "ta": "திருமதி லக்ஷ்மி & திரு வெங்கடேஷ் ஐயர்"
+      },
+      "native_place": {
+        "en": "of Madurai",
+        "ta": "மதுரை"
+      }
     },
     "groom": {
-      "name": { "en": "Karthik", "ta": "கார்த்திக்" },
-      "full_name": { "en": "Karthik Raghavan", "ta": "கார்த்திக் ராகவன்" },
-      "parents": { "en": "Smt. Meenakshi & Shri Raghavan Subramanian", "ta": "திருமதி மீனாட்சி & திரு ராகவன் சுப்பிரமணியன்" },
-      "native_place": { "en": "of Coimbatore", "ta": "கோயம்புத்தூர்" }
+      "name": {
+        "en": "Karthik",
+        "ta": "கார்த்திக்"
+      },
+      "full_name": {
+        "en": "Karthik Raghavan",
+        "ta": "கார்த்திக் ராகவன்"
+      },
+      "parents": {
+        "en": "Smt. Meenakshi & Shri Raghavan Subramanian",
+        "ta": "திருமதி மீனாட்சி & திரு ராகவன் சுப்பிரமணியன்"
+      },
+      "native_place": {
+        "en": "of Coimbatore",
+        "ta": "கோயம்புத்தூர்"
+      }
     }
   },
-
   "wedding_date": "2027-02-05",
   "timezone": "+05:30",
-
+  "wedding_city": {
+    "en": "Madurai",
+    "ta": "மதுரை"
+  },
   "language": {
     "regional": "ta",
     "regional_label": "தமிழ்",
     "english_label": "English"
   },
-
   "theme": {
     "kumkum": "#8B1A1A",
     "gold": "#C8962E",
@@ -39,7 +63,6 @@
     "sandalwood": "#E8D3B0",
     "stone": "#2A1A12"
   },
-
   "show": {
     "invocation": true,
     "countdown": true,
@@ -49,11 +72,9 @@
     "regional_language": true,
     "footer_credit": true
   },
-
   "entry": {
     "auto_open_seconds": 5
   },
-
   "invocation": {
     "shloka": "॥ श्री गणेशाय नमः ॥",
     "shloka_script": "sa",
@@ -62,105 +83,225 @@
       "ta": "விநாயகப் பெருமான் மற்றும் பெரியோர்களின் ஆசியுடன்"
     }
   },
-
   "events": [
     {
       "id": "nichayathartham",
-      "name": { "en": "Nichayathartham", "ta": "நிச்சயதார்த்தம்" },
-      "subtitle": { "en": "The engagement", "ta": "திருமண உறுதி" },
+      "name": {
+        "en": "Nichayathartham",
+        "ta": "நிச்சயதார்த்தம்"
+      },
+      "subtitle": {
+        "en": "The engagement",
+        "ta": "திருமண உறுதி"
+      },
       "date": "2027-02-03",
       "start": "18:00",
       "end": "21:00",
-      "venue": { "en": "Sri Lakshmi Kalyana Mandapam, Anna Nagar, Madurai", "ta": "ஸ்ரீ லக்ஷ்மி கல்யாண மண்டபம், அண்ணா நகர், மதுரை" },
+      "venue": {
+        "en": "Sri Lakshmi Kalyana Mandapam, Anna Nagar, Madurai",
+        "ta": "ஸ்ரீ லக்ஷ்மி கல்யாண மண்டபம், அண்ணா நகர், மதுரை"
+      },
       "map": "https://maps.google.com/?q=Anna+Nagar+Madurai",
-      "dress_code": { "en": "Silk sarees & veshtis", "ta": "பட்டுப் புடவை & வேஷ்டி" }
+      "dress_code": {
+        "en": "Silk sarees & veshtis",
+        "ta": "பட்டுப் புடவை & வேஷ்டி"
+      }
     },
     {
       "id": "mehendi-sangeet",
-      "name": { "en": "Mehendi & Sangeet", "ta": "மெஹந்தி & சங்கீத்" },
-      "subtitle": { "en": "An evening of henna and music", "ta": "மருதாணியும் இசையும்" },
+      "name": {
+        "en": "Mehendi & Sangeet",
+        "ta": "மெஹந்தி & சங்கீத்"
+      },
+      "subtitle": {
+        "en": "An evening of henna and music",
+        "ta": "மருதாணியும் இசையும்"
+      },
       "date": "2027-02-04",
       "start": "16:00",
       "end": "22:00",
-      "venue": { "en": "The Iyer Residence, Gandhi Nagar, Madurai", "ta": "ஐயர் இல்லம், காந்தி நகர், மதுரை" },
+      "venue": {
+        "en": "The Iyer Residence, Gandhi Nagar, Madurai",
+        "ta": "ஐயர் இல்லம், காந்தி நகர், மதுரை"
+      },
       "map": "https://maps.google.com/?q=Gandhi+Nagar+Madurai",
-      "dress_code": { "en": "Festive colours — greens & pinks", "ta": "பண்டிகை வண்ணங்கள் — பச்சை & இளஞ்சிவப்பு" }
+      "dress_code": {
+        "en": "Festive colours — greens & pinks",
+        "ta": "பண்டிகை வண்ணங்கள் — பச்சை & இளஞ்சிவப்பு"
+      }
     },
     {
       "id": "kashi-yatra",
-      "name": { "en": "Kashi Yatra & Oonjal", "ta": "காசி யாத்திரை & ஊஞ்சல்" },
-      "subtitle": { "en": "The pilgrimage and the swing", "ta": "யாத்திரையும் ஊஞ்சலும்" },
+      "name": {
+        "en": "Kashi Yatra & Oonjal",
+        "ta": "காசி யாத்திரை & ஊஞ்சல்"
+      },
+      "subtitle": {
+        "en": "The pilgrimage and the swing",
+        "ta": "யாத்திரையும் ஊஞ்சலும்"
+      },
       "date": "2027-02-05",
       "start": "06:00",
       "end": "07:15",
-      "venue": { "en": "Sri Lakshmi Kalyana Mandapam, Anna Nagar, Madurai", "ta": "ஸ்ரீ லக்ஷ்மி கல்யாண மண்டபம், அண்ணா நகர், மதுரை" },
+      "venue": {
+        "en": "Sri Lakshmi Kalyana Mandapam, Anna Nagar, Madurai",
+        "ta": "ஸ்ரீ லக்ஷ்மி கல்யாண மண்டபம், அண்ணா நகர், மதுரை"
+      },
       "map": "https://maps.google.com/?q=Anna+Nagar+Madurai",
-      "dress_code": { "en": "Silk sarees & veshtis", "ta": "பட்டுப் புடவை & வேஷ்டி" }
+      "dress_code": {
+        "en": "Silk sarees & veshtis",
+        "ta": "பட்டுப் புடவை & வேஷ்டி"
+      }
     },
     {
       "id": "muhurtham",
       "muhurtham": true,
-      "name": { "en": "Muhurtham", "ta": "முகூர்த்தம்" },
-      "subtitle": { "en": "The wedding", "ta": "திருமணம்" },
+      "name": {
+        "en": "Muhurtham",
+        "ta": "முகூர்த்தம்"
+      },
+      "subtitle": {
+        "en": "The wedding",
+        "ta": "திருமணம்"
+      },
       "date": "2027-02-05",
       "start": "07:30",
       "end": "09:00",
-      "venue": { "en": "Sri Lakshmi Kalyana Mandapam, Anna Nagar, Madurai", "ta": "ஸ்ரீ லக்ஷ்மி கல்யாண மண்டபம், அண்ணா நகர், மதுரை" },
+      "venue": {
+        "en": "Sri Lakshmi Kalyana Mandapam, Anna Nagar, Madurai",
+        "ta": "ஸ்ரீ லக்ஷ்மி கல்யாண மண்டபம், அண்ணா நகர், மதுரை"
+      },
       "map": "https://maps.google.com/?q=Anna+Nagar+Madurai",
-      "dress_code": { "en": "Silk sarees & veshtis", "ta": "பட்டுப் புடவை & வேஷ்டி" },
-      "note": { "en": "Followed by a traditional lunch on banana leaf", "ta": "தொடர்ந்து வாழை இலை விருந்து" }
+      "dress_code": {
+        "en": "Silk sarees & veshtis",
+        "ta": "பட்டுப் புடவை & வேஷ்டி"
+      },
+      "note": {
+        "en": "Followed by a traditional lunch on banana leaf",
+        "ta": "தொடர்ந்து வாழை இலை விருந்து"
+      }
     },
     {
       "id": "reception",
-      "name": { "en": "Reception", "ta": "வரவேற்பு" },
-      "subtitle": { "en": "Dinner and celebration", "ta": "விருந்தும் கொண்டாட்டமும்" },
+      "name": {
+        "en": "Reception",
+        "ta": "வரவேற்பு"
+      },
+      "subtitle": {
+        "en": "Dinner and celebration",
+        "ta": "விருந்தும் கொண்டாட்டமும்"
+      },
       "date": "2027-02-05",
       "start": "19:00",
       "end": "22:30",
-      "venue": { "en": "The Courtyard, Hotel Vaigai Heritage, Madurai", "ta": "தி கோர்ட்யார்ட், ஹோட்டல் வைகை ஹெரிடேஜ், மதுரை" },
+      "venue": {
+        "en": "The Courtyard, Hotel Vaigai Heritage, Madurai",
+        "ta": "தி கோர்ட்யார்ட், ஹோட்டல் வைகை ஹெரிடேஜ், மதுரை"
+      },
       "map": "https://maps.google.com/?q=Madurai",
-      "dress_code": { "en": "Evening formal or Indo-western", "ta": "மாலை முறையான அல்லது இந்தோ-வெஸ்டர்ன் உடை" }
+      "dress_code": {
+        "en": "Evening formal or Indo-western",
+        "ta": "மாலை முறையான அல்லது இந்தோ-வெஸ்டர்ன் உடை"
+      }
     }
   ],
-
   "story": [
-    { "year": "2019", "title": { "en": "First hello", "ta": "முதல் வணக்கம்" }, "text": { "en": "A Carnatic concert in Chennai, two seats apart.", "ta": "சென்னையில் ஒரு கர்நாடக இசைக் கச்சேரியில், இரண்டு இருக்கைகள் இடைவெளியில்." }, "photo": "photos/story-1.jpg" },
-    { "year": "2023", "title": { "en": "The families meet", "ta": "குடும்பங்கள் சந்திப்பு" }, "text": { "en": "Filter coffee, horoscopes and a great deal of laughter.", "ta": "பில்டர் காபி, ஜாதகம், நிறைய சிரிப்பு." }, "photo": "photos/story-2.jpg" },
-    { "year": "2026", "title": { "en": "The question", "ta": "அந்தக் கேள்வி" }, "text": { "en": "At dusk on the steps of a temple tank, she said yes.", "ta": "அந்தி வேளையில் ஒரு கோயில் குளத்தின் படிகளில், அவள் சம்மதித்தாள்." }, "photo": "photos/story-3.jpg" }
+    {
+      "year": "2019",
+      "title": {
+        "en": "First hello",
+        "ta": "முதல் வணக்கம்"
+      },
+      "text": {
+        "en": "A Carnatic concert in Chennai, two seats apart.",
+        "ta": "சென்னையில் ஒரு கர்நாடக இசைக் கச்சேரியில், இரண்டு இருக்கைகள் இடைவெளியில்."
+      },
+      "photo": "photos/story-1.jpg"
+    },
+    {
+      "year": "2023",
+      "title": {
+        "en": "The families meet",
+        "ta": "குடும்பங்கள் சந்திப்பு"
+      },
+      "text": {
+        "en": "Filter coffee, horoscopes and a great deal of laughter.",
+        "ta": "பில்டர் காபி, ஜாதகம், நிறைய சிரிப்பு."
+      },
+      "photo": "photos/story-2.jpg"
+    },
+    {
+      "year": "2026",
+      "title": {
+        "en": "The question",
+        "ta": "அந்தக் கேள்வி"
+      },
+      "text": {
+        "en": "At dusk on the steps of a temple tank, she said yes.",
+        "ta": "அந்தி வேளையில் ஒரு கோயில் குளத்தின் படிகளில், அவள் சம்மதித்தாள்."
+      },
+      "photo": "photos/story-3.jpg"
+    }
   ],
   "swing_photo": "photos/couple.jpg",
-
   "gallery": [
-    { "src": "photos/gallery-1.jpg", "alt": { "en": "Ananya and Karthik at the temple", "ta": "கோயிலில் அனன்யாவும் கார்த்திக்கும்" } },
-    { "src": "photos/gallery-2.jpg", "alt": { "en": "Laughing together", "ta": "ஒன்றாகச் சிரிக்கும் தருணம்" } },
-    { "src": "photos/gallery-3.jpg", "alt": { "en": "Walking by the river", "ta": "நதிக்கரையில் நடை" } }
+    {
+      "src": "photos/gallery-1.jpg",
+      "alt": {
+        "en": "Ananya and Karthik at the temple",
+        "ta": "கோயிலில் அனன்யாவும் கார்த்திக்கும்"
+      }
+    },
+    {
+      "src": "photos/gallery-2.jpg",
+      "alt": {
+        "en": "Laughing together",
+        "ta": "ஒன்றாகச் சிரிக்கும் தருணம்"
+      }
+    },
+    {
+      "src": "photos/gallery-3.jpg",
+      "alt": {
+        "en": "Walking by the river",
+        "ta": "நதிக்கரையில் நடை"
+      }
+    }
   ],
-
   "rsvp": {
     "endpoint": "",
     "deadline": "2027-01-15",
     "max_guests": 6,
     "food_options": [
-      { "en": "Vegetarian", "ta": "சைவம்" },
-      { "en": "Jain", "ta": "ஜைனம்" },
-      { "en": "No onion, no garlic", "ta": "வெங்காயம், பூண்டு இல்லாமல்" }
+      {
+        "en": "Vegetarian",
+        "ta": "சைவம்"
+      },
+      {
+        "en": "Jain",
+        "ta": "ஜைனம்"
+      },
+      {
+        "en": "No onion, no garlic",
+        "ta": "வெங்காயம், பூண்டு இல்லாமல்"
+      }
     ]
   },
-
   "music": {
     "src": "music.mp3",
     "volume": 0.5
   },
-
   "closing": {
-    "blessing": { "en": "Your presence and blessings will make our celebration complete.", "ta": "தங்கள் வருகையும் ஆசியும் எங்கள் மகிழ்ச்சியை முழுமையாக்கும்." },
-    "families": { "en": "With love, the Iyer and Subramanian families", "ta": "அன்புடன், ஐயர் மற்றும் சுப்பிரமணியன் குடும்பத்தினர்" }
+    "blessing": {
+      "en": "Your presence and blessings will make our celebration complete.",
+      "ta": "தங்கள் வருகையும் ஆசியும் எங்கள் மகிழ்ச்சியை முழுமையாக்கும்."
+    },
+    "families": {
+      "en": "With love, the Iyer and Subramanian families",
+      "ta": "அன்புடன், ஐயர் மற்றும் சுப்பிரமணியன் குடும்பத்தினர்"
+    }
   },
-
   "credit": "Crafted by Aamantran Atelier",
-
   "elements": {},
-
   "text": {
     "en": {
       "tap_to_light": "Tap to light the lamp",
@@ -170,11 +311,25 @@
       "music_on": "Play music",
       "music_off": "Pause music",
       "weds": "&",
-      "wedding_of": "The wedding of",
-      "daughter_of": "Daughter of",
-      "son_of": "Son of",
       "dear": "Dear {guest},",
-      "greeting": "we would be honoured to have you with us."
+      "greeting": "we would be honoured to have you with us.",
+      "together": "Together with their families",
+      "daughter_of": "Daughter of {parents} {place}",
+      "son_of": "Son of {parents} {place}",
+      "scroll_hint": "Scroll for the celebrations",
+      "muhurtham_label": "The auspicious hour",
+      "countdown_title": "Until the muhurtham",
+      "days": "Days",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "seconds": "Seconds",
+      "married": "Happily married — thank you for your blessings",
+      "celebrations": "The Celebrations",
+      "dress_code": "Dress code",
+      "directions": "Get directions",
+      "add_calendar": "Add to calendar",
+      "closing_title": "With your blessings",
+      "wedding_of": "The wedding of"
     },
     "ta": {
       "tap_to_light": "விளக்கை ஏற்ற தொடவும்",
@@ -184,11 +339,25 @@
       "music_on": "இசையை இயக்கு",
       "music_off": "இசையை நிறுத்து",
       "weds": "&",
-      "wedding_of": "திருமண அழைப்பிதழ்",
-      "daughter_of": "மகள்",
-      "son_of": "மகன்",
       "dear": "அன்புள்ள {guest},",
-      "greeting": "தங்களை அன்புடன் வரவேற்கிறோம்."
+      "greeting": "தங்களை அன்புடன் வரவேற்கிறோம்.",
+      "together": "பெற்றோர்களின் நல்லாசியுடன்",
+      "daughter_of": "{place} {parents} அவர்களின் அன்பு மகள்",
+      "son_of": "{place} {parents} அவர்களின் அன்பு மகன்",
+      "scroll_hint": "விழா விவரங்களுக்கு கீழே செல்லவும்",
+      "muhurtham_label": "சுப முகூர்த்தம்",
+      "countdown_title": "முகூர்த்தத்திற்கு இன்னும்",
+      "days": "நாட்கள்",
+      "hours": "மணி",
+      "minutes": "நிமிடம்",
+      "seconds": "வினாடி",
+      "married": "இனிதே திருமணம் நடந்தது — உங்கள் ஆசிகளுக்கு நன்றி",
+      "celebrations": "திருமண நிகழ்வுகள்",
+      "dress_code": "உடை",
+      "directions": "வழி காட்டு",
+      "add_calendar": "நாட்காட்டியில் சேர்",
+      "closing_title": "உங்கள் ஆசியுடன்",
+      "wedding_of": "திருமண அழைப்பிதழ்"
     }
   }
 }
