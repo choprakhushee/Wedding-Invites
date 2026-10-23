@@ -170,14 +170,17 @@
   // plain box (parlour.css .arch), whose 3% side padding matches the 6-unit frame here.
   // Colours come from CSS: .arch__frame, .arch__face, .arch__line.
 
-  function archCapSVG() {
-    const outer = cuspedArch(0, 200, 92, 2, 4);
-    const face = cuspedArch(6, 194, 94, 10, 4);
-    const line = cuspedArch(9.5, 190.5, 95, 15, 4);
-    return `<svg ${SVGNS} class="arch__cap" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-  <path class="arch__frame" d="M0 100.5 V92 ${segsPath(outer)} V100.5 Z"/>
-  <path class="arch__face" d="M6 100.5 V94 ${segsPath(face)} V100.5 Z"/>
-  <path class="arch__line" d="M9.5 100.5 V95 ${segsPath(line)} V100.5" fill="none" stroke-width="1" vector-effect="non-scaling-stroke"/>
+  // flat: a lower arch (200 × 60) for compact cards.
+  function archCapSVG(flat) {
+    const h = flat ? 60 : 100, k = flat ? 0.56 : 1;
+    const y = (v) => h - (100 - v) * k;
+    const outer = cuspedArch(0, 200, y(92), y(2), 4);
+    const face = cuspedArch(6, 194, y(94), y(10), 4);
+    const line = cuspedArch(9.5, 190.5, y(95), y(15), 4);
+    return `<svg ${SVGNS} class="arch__cap" viewBox="0 0 200 ${h}" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+  <path class="arch__frame" d="M0 ${h + 0.5} V${r(y(92))} ${segsPath(outer)} V${h + 0.5} Z"/>
+  <path class="arch__face" d="M6 ${h + 0.5} V${r(y(94))} ${segsPath(face)} V${h + 0.5} Z"/>
+  <path class="arch__line" d="M9.5 ${h + 0.5} V${r(y(95))} ${segsPath(line)} V${h + 0.5}" fill="none" stroke-width="1" vector-effect="non-scaling-stroke"/>
 </svg>`;
   }
 

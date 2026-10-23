@@ -484,10 +484,10 @@
   }
 
   // An arch panel: cusped top + box. frame/face: maroon, green, linen.
-  function archCard(frame, face, className) {
-    const card = el("div", "arch arch--frame-" + frame + " arch--face-" + face + (className ? " " + className : ""));
+  function archCard(frame, face, className, flat) {
+    const card = el("div", "arch arch--frame-" + frame + " arch--face-" + face + (flat ? " arch--flat" : "") + (className ? " " + className : ""));
     const head = el("div", "arch__head");
-    head.innerHTML = M.archCapSVG();
+    head.innerHTML = M.archCapSVG(flat);
     const crown = el("div", "arch__crown");
     head.appendChild(crown);
     const body = el("div", "arch__body");
@@ -756,7 +756,7 @@
       const shade = el("div", "room__shade");
       const sprigs = [deco(motif("vine-sprig"), "room__sprig room__sprig--a"), deco(motif("bloom-stem"), "room__sprig room__sprig--b")];
 
-      const a = archCard(ev.frame || ROOM_FRAME[pattern] || "maroon", "linen", "room__card");
+      const a = archCard(ev.frame || ROOM_FRAME[pattern] || "maroon", "linen", "room__card", true);
       a.crown.append(Object.assign(el("span", "room__numeral"), { textContent: ROMAN[i] || String(i + 1) }));
       const name = text("h3", "room__name caps", () => t(ev.name));
       name.id = "room-title-" + (i + 1);

@@ -356,6 +356,8 @@ body::after {
 .arch--frame-green { --frame: var(--green); }
 .arch__head { position: relative; }
 .arch__cap { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; }
+.arch--flat .arch__cap { aspect-ratio: 10 / 3; }
+.arch--flat .arch__crown { inset: 30% 0 0; padding-bottom: 1%; }
 .arch__frame { fill: var(--frame); }
 .arch__face { fill: var(--face); }
 .arch__line { stroke: var(--line); }
@@ -710,3 +712,12 @@ body::after {
 .has-photo .room__pilaster { display: block; }
 .door__half { width: 200%; max-width: none; height: 100%; object-fit: cover; }
 .door--right .door__half { margin-left: -100%; }
+
+/* Rooms with a painting: the card sits low so the scene shows above it. */
+.has-photo .room__stage { align-items: end; padding-bottom: max(18px, env(safe-area-inset-bottom)); }
+.has-photo .room__card { width: min(86vw, 400px); }
+.has-photo .room__sprig--b { display: none; }
+.room__actions .btn { flex: 1 1 128px; padding: 12px 10px; letter-spacing: .1em; }
+@media (min-width: 768px) {
+  .has-photo .room__stage { align-items: center; justify-items: end; padding-right: 9vw; }
+}
