@@ -684,3 +684,29 @@ body::after {
   .petals, .entry__dust { display: none; }
   .lantern__swing, .scroll-hint i { animation: none; }
 }
+
+/* ==========================================================================
+   Painted scenes (assets/elements/backdrop-couple.jpg, room-*.jpg, doors.jpg)
+   ========================================================================== */
+.photo { background-position: center; background-size: cover; opacity: 0; transition: opacity 1.2s var(--ease); }
+.photo.is-loaded { opacity: 1; }
+.photo::after { /* soft candlelit vignette so the arch card stays the hero */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 55% at 50% 52%, rgba(43, 31, 26, .05) 0%, rgba(43, 31, 26, .42) 100%);
+}
+.room__pilaster {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  display: none;
+  width: clamp(14px, 4vw, 36px);
+  background-size: 100% auto;
+}
+.room__pilaster--l { left: 0; box-shadow: inset -1px 0 0 var(--gold), 4px 0 12px rgba(0, 0, 0, .25); }
+.room__pilaster--r { right: 0; box-shadow: inset 1px 0 0 var(--gold), -4px 0 12px rgba(0, 0, 0, .25); }
+.has-photo .room__pilaster { display: block; }
+.door__half { width: 200%; max-width: none; height: 100%; object-fit: cover; }
+.door--right .door__half { margin-left: -100%; }

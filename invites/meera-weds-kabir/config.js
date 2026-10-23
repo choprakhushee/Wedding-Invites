@@ -53,12 +53,14 @@ window.WEDDING = {
   /* ---------- Events (add, remove or reorder freely) ----------
      pattern: harlequin, pinstripe, lattice, vine, damask, checker, buti, vine-green
      frame (optional): "maroon" or "green", the colour of the arch around the card
+     backdrop (optional): a painted scene behind the room, in assets/elements/
      map: a Google Maps link. Easiest: search the venue on Google Maps,
           tap Share, copy the link and paste it here.                       */
   events: [
     {
       name: { en: "Haldi", hi: "हल्दी" },
       pattern: "pinstripe",
+      backdrop: "assets/elements/room-haldi.jpg",
       start: "2027-02-12T10:00:00+05:30",
       end:   "2027-02-12T13:00:00+05:30",
       venue: { en: "The Marigold Courtyard, Haveli Rathore", hi: "गेंदा आँगन, हवेली राठौड़" },
@@ -69,6 +71,7 @@ window.WEDDING = {
     {
       name: { en: "Mehendi", hi: "मेहंदी" },
       pattern: "vine",
+      backdrop: "assets/elements/room-mehendi.jpg",
       start: "2027-02-12T16:00:00+05:30",
       end:   "2027-02-12T20:00:00+05:30",
       venue: { en: "The Garden Terrace, Haveli Rathore", hi: "बाग़ टैरेस, हवेली राठौड़" },
@@ -79,6 +82,7 @@ window.WEDDING = {
     {
       name: { en: "Sangeet", hi: "संगीत" },
       pattern: "lattice",
+      backdrop: "assets/elements/room-sangeet.jpg",
       start: "2027-02-13T19:30:00+05:30",
       end:   "2027-02-13T23:30:00+05:30",
       venue: { en: "The Mirror Hall, Lakeview Palace", hi: "शीश महल, लेकव्यू पैलेस" },
@@ -89,6 +93,7 @@ window.WEDDING = {
     {
       name: { en: "Wedding · Pheras", hi: "विवाह · फेरे" },
       pattern: "harlequin",
+      backdrop: "assets/elements/room-wedding.jpg",
       start: "2027-02-14T19:00:00+05:30",
       end:   "2027-02-14T23:00:00+05:30",
       venue: { en: "The Lake Pavilion, Lakeview Palace", hi: "झील मंडप, लेकव्यू पैलेस" },
@@ -99,6 +104,7 @@ window.WEDDING = {
     {
       name: { en: "Reception", hi: "रिसेप्शन" },
       pattern: "damask",
+      backdrop: "assets/elements/room-reception.jpg",
       start: "2027-02-15T20:00:00+05:30",
       end:   "2027-02-15T23:59:00+05:30",
       venue: { en: "The Durbar Lawns, Lakeview Palace", hi: "दरबार लॉन, लेकव्यू पैलेस" },
@@ -153,7 +159,7 @@ window.WEDDING = {
   /* ---------- Music (starts when the guest taps to open) ----------
      Use only music you have the rights to. MP3, ideally under 2 MB.        */
   music: {
-    src: "assets/music/sample-santoor.mp3",
+    src: "assets/music/sample-festive.mp3",
     volume: 0.6
   },
 
@@ -180,6 +186,10 @@ window.WEDDING = {
      it. If the file isn't there, the built-in Palace Parlour drawing is used.
      Sizes are listed in assets/elements/README.md.                          */
   elements: {
+    // Painted scenes and doors (JPG, about 900 × 1600 px, under 250 KB each)
+    doors: "assets/elements/doors.jpg",
+    backdrop: "assets/elements/backdrop-couple.jpg",
+    // Or a separate picture for each door (these win over doors.jpg)
     doorLeft: "assets/elements/door-left.png",
     doorRight: "assets/elements/door-right.png",
     arch: "assets/elements/arch.png",

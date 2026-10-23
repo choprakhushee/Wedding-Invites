@@ -99,7 +99,7 @@
 
   async function loadElements() {
     const e = W.elements || {};
-    const keys = ["doorLeft", "doorRight", "arch", "cornerFloral", "borderTop", "divider"];
+    const keys = ["doors", "doorLeft", "doorRight", "arch", "cornerFloral", "borderTop", "divider"];
     const found = await Promise.all(keys.map((k) => probe(e[k])));
     const petals = await Promise.all((e.petals || []).map(probe));
     const out = { petals: petals.filter(Boolean) };
@@ -218,7 +218,12 @@
     const leaves = ["left", "right"].map((side) => {
       const leaf = el("div", "door door--" + side);
       const custom = side === "left" ? els.doorLeft : els.doorRight;
-      if (custom) {
+      if (els.doors && !custom) {
+        // One picture of both doors: each leaf shows its own half.
+        const img = el("img", "door__half", { alt: "", decoding: "async" });
+        img.src = els.doors;
+        leaf.appendChild(img);
+      } else if (custom) {
         const img = el("img", "", { alt: "", decoding: "async" });
         img.src = custom;
         leaf.appendChild(img);
@@ -456,6 +461,28 @@
     return i;
   }
 
+  // A painted scene behind a section. Loaded only as the guest gets near it,
+  // and it fades in over the pattern; if the file is missing the pattern stays.
+  function photoLayer(src, className) {
+    const layer = el("div", "layer photo" + (className ? " " + className : ""), { "aria-hidden": "true" });
+    if (!src) return layer;
+    const load = () => {
+      const img = new Image();
+      img.onload = () => {
+        layer.style.backgroundImage = 'url("' + src + '")';
+        layer.classList.add("is-loaded");
+        layer.closest(".scene, .room")?.classList.add("has-photo");
+      };
+      img.src = src;
+    };
+    if (!("IntersectionObserver" in window)) { load(); return layer; }
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { io.disconnect(); load(); }
+    }, { rootMargin: "150% 0px" });
+    requestAnimationFrame(() => io.observe(layer));
+    return layer;
+  }
+
   // An arch panel: cusped top + box. frame/face: maroon, green, linen.
   function archCard(frame, face, className) {
     const card = el("div", "arch arch--frame-" + frame + " arch--face-" + face + (className ? " " + className : ""));
@@ -555,6 +582,7 @@
     const scene = el("section", "scene couple", { "aria-labelledby": "couple-names" });
     const stage = el("div", "scene__stage");
     const wall = el("div", "layer couple__wall pattern pattern--buti");
+    const photo = photoLayer((W.elements || {}).backdrop, "couple__photo");
 
     const border = el("div", "couple__border vine-strip", { "aria-hidden": "true" });
     border.style.backgroundImage = 'url("' + (els.borderTop || motif("border-vine")) + '")';
@@ -591,9 +619,9 @@
     const hint = el("div", "scroll-hint", { "aria-hidden": "true" });
     hint.append(text("span", "", () => word("scrollHint")), el("i"));
 
-    stage.append(wall, border, drapes[0], drapes[1], lanterns[0], lanterns[1], a.card, sprigs[0], sprigs[1], hint);
+    stage.append(wall, photo, border, drapes[0], drapes[1], lanterns[0], lanterns[1], a.card, sprigs[0], sprigs[1], hint);
     scene.appendChild(stage);
-    return { scene, wall, border, drapes, lanterns, arch: a.card, kicker, writes: [first, amp, second], together, date, more, sprigs, hint };
+    return { scene, wall, photo, border, drapes, lanterns, arch: a.card, kicker, writes: [first, amp, second], together, date, more, sprigs, hint };
   }
 
   // The hero moment of this section: the names write themselves in.
@@ -722,6 +750,9 @@
       room.style.zIndex = String(i + 1);
       const stage = el("div", "room__stage");
       const wall = el("div", "layer room__wall pattern pattern--" + pattern);
+      const photo = photoLayer(ev.backdrop, "room__photo");
+      // The room's pattern runs down both sides like painted pilasters.
+      const pilasters = ["l", "r"].map((s) => el("div", "room__pilaster room__pilaster--" + s + " pattern pattern--" + pattern, { "aria-hidden": "true" }));
       const shade = el("div", "room__shade");
       const sprigs = [deco(motif("vine-sprig"), "room__sprig room__sprig--a"), deco(motif("bloom-stem"), "room__sprig room__sprig--b")];
 
@@ -773,7 +804,7 @@
       parts.push(actions, menu);
       a.inner.append(...parts);
 
-      stage.append(wall, sprigs[0], sprigs[1], a.card, shade);
+      stage.append(wall, photo, pilasters[0], pilasters[1], sprigs[0], sprigs[1], a.card, shade);
       room.appendChild(stage);
       wrap.appendChild(room);
 
@@ -787,7 +818,7 @@
       });
       index.appendChild(chip);
 
-      return { room, stage, wall, shade, sprigs, card: a.card };
+      return { room, stage, wall, photo, shade, sprigs, card: a.card };
     });
 
     return { wrap, intro, rooms };
@@ -846,7 +877,7 @@
     // Couple: the parlour opens up around the names.
     const c = parts.couple;
     gsap.timeline({ defaults: none, scrollTrigger: { trigger: c.scene, start: "top top", end: "bottom bottom", scrub } })
-      .to(c.wall, { yPercent: -10 }, 0)
+      .to([c.wall, c.photo], { yPercent: -8 }, 0)
       .to(c.border, { xPercent: -14 }, 0)
       .to(c.drapes[0], { xPercent: -62, rotation: -3 }, 0)
       .to(c.drapes[1], { xPercent: 62, rotation: 3 }, 0)
@@ -882,7 +913,7 @@
     if (parts.rooms) {
       const rooms = parts.rooms.rooms;
       rooms.forEach((r, i) => {
-        gsap.fromTo(r.wall, { yPercent: -7 }, { yPercent: 7, ease: "none", scrollTrigger: { trigger: r.room, start: "top bottom", end: "bottom top", scrub: true } });
+        gsap.fromTo([r.wall, r.photo], { yPercent: -7 }, { yPercent: 7, ease: "none", scrollTrigger: { trigger: r.room, start: "top bottom", end: "bottom top", scrub: true } });
         const arrive = gsap.timeline({ defaults: none, scrollTrigger: { trigger: r.room, start: "top bottom", end: "top top", scrub, invalidateOnRefresh: true } });
         if (i > 0) {
           arrive.fromTo(r.stage, { clipPath: "inset(18% 9% 0% 9% round 50% 50% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0% round 0% 0% 0% 0%)" }, 0);
