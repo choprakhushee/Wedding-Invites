@@ -362,6 +362,7 @@
       document.body.classList.remove("is-locked");
       music.show();
       onDone();
+      if (window.ScrollTrigger) ScrollTrigger.refresh();
     }
 
     function open(ev) {
@@ -378,7 +379,7 @@
       }
 
       ui.skip.style.visibility = "visible";
-      timeline = gateTimeline(ui, els, dust, finish);
+      timeline = gateTimeline(ui, els, dust, finish, onDone);
     }
 
     // Tapping anywhere opens; once opening, a second tap (or Skip) hurries it along.
@@ -390,7 +391,7 @@
     ui.skip.addEventListener("click", (ev) => { ev.stopPropagation(); if (timeline) timeline.timeScale(8); });
   }
 
-  function gateTimeline(ui, els, dust, finish) {
+  function gateTimeline(ui, els, dust, finish, reveal) {
     const lines = ui.gate.querySelectorAll(".gate__lines [data-step]");
     const fill = ui.gate.querySelector(".gate__fill");
     const art = ui.gate.querySelector(".gate__art");
@@ -433,6 +434,7 @@
 
     // 4. We walk through the doorway, and the invitation is waiting.
     tl.to(ui.gate, { scale: 2.6, autoAlpha: 0, transformOrigin: "50% 61%", duration: 1.5 }, "open+=1.15")
+      .call(reveal, null, "open+=1.6")
       .to([ui.scrim, ui.wall, ui.skip], { autoAlpha: 0, duration: 1.3 }, "<0.2")
       .to(ui.entry, { backgroundColor: "rgba(0,0,0,0)", duration: 1.3 }, "<");
 
@@ -440,47 +442,474 @@
   }
 
   // ==========================================================================
-  // PAGE (stage 1: the couple screen the doors open onto)
+  // PAGE — every section is a "stage" that holds still while its layers move
+  // with the scroll, so the parlour feels alive under the guest's thumb.
   // ==========================================================================
+
+  // Scroll-linked motion needs GSAP + ScrollTrigger and a guest who hasn't asked for less motion.
+  const fx = !reduceMotion && !!window.gsap && !!window.ScrollTrigger;
+  const motif = (name) => BASE + "motifs/" + name + ".svg";
+
+  function deco(src, className) {
+    const i = el("img", className, { alt: "", "aria-hidden": "true", decoding: "async", loading: "lazy" });
+    i.src = src;
+    return i;
+  }
+
+  // An arch panel: cusped top + box. frame/face: maroon, green, linen.
+  function archCard(frame, face, className) {
+    const card = el("div", "arch arch--frame-" + frame + " arch--face-" + face + (className ? " " + className : ""));
+    const head = el("div", "arch__head");
+    head.innerHTML = M.archCapSVG();
+    const crown = el("div", "arch__crown");
+    head.appendChild(crown);
+    const body = el("div", "arch__body");
+    const inner = el("div", "arch__inner");
+    body.appendChild(inner);
+    card.append(head, body);
+    return { card, crown, inner };
+  }
+
+  function text(tag, className, getter) {
+    return bind(el(tag, className), getter);
+  }
+
+  // ---------- Dates, times and calendars ----------
+
+  function locale() { return lang === "hi" ? "hi-IN" : "en-IN"; }
+
+  function longDate(iso) {
+    const p = dateParts(iso);
+    if (!p) return "";
+    const d = new Date(Date.UTC(+p.y, +p.mo - 1, +p.d, 12));
+    return new Intl.DateTimeFormat(locale(), { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" }).format(d);
+  }
+
+  function clock(iso) {
+    const p = dateParts(iso);
+    if (!p || p.h == null) return "";
+    const d = new Date(Date.UTC(2000, 0, 1, +p.h, +p.mi));
+    return new Intl.DateTimeFormat(locale(), { hour: "numeric", minute: "2-digit", hour12: true, timeZone: "UTC" }).format(d).replace(/\b(AM|PM)\b/, (m) => m.toLowerCase());
+  }
+
+  function timeRange(ev) {
+    const a = clock(ev.start), b = clock(ev.end);
+    return a && b ? a + " – " + b : a;
+  }
+
+  function utcStamp(value) {
+    const d = new Date(value);
+    return isNaN(d) ? "" : d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  }
+
+  function eventTitle(ev) {
+    const n = names();
+    return t(ev.name) + " · " + t(n.first.name) + " & " + t(n.second.name);
+  }
+
+  function eventNotes(ev) {
+    return [ev.dressCode ? word("dressCode") + ": " + t(ev.dressCode) : "", ev.map ? word("directions") + ": " + ev.map : ""].filter(Boolean).join("\n");
+  }
+
+  function eventPlace(ev) {
+    return [t(ev.venue), ev.address].filter(Boolean).join(", ");
+  }
+
+  function googleCalendarUrl(ev) {
+    const q = new URLSearchParams({
+      action: "TEMPLATE",
+      text: eventTitle(ev),
+      dates: utcStamp(ev.start) + "/" + utcStamp(ev.end || ev.start),
+      details: eventNotes(ev),
+      location: eventPlace(ev),
+    });
+    return "https://calendar.google.com/calendar/render?" + q.toString();
+  }
+
+  function downloadIcs(ev, index) {
+    const esc = (s) => String(s).replace(/\\/g, "\\\\").replace(/([,;])/g, "\\$1").replace(/\r?\n/g, "\\n");
+    const ics = [
+      "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Palace Parlour//Wedding Website//EN", "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
+      "BEGIN:VEVENT",
+      "UID:" + utcStamp(ev.start) + "-" + index + "@palace-parlour",
+      "DTSTAMP:" + utcStamp(Date.now()),
+      "DTSTART:" + utcStamp(ev.start),
+      "DTEND:" + utcStamp(ev.end || ev.start),
+      "SUMMARY:" + esc(eventTitle(ev)),
+      "LOCATION:" + esc(eventPlace(ev)),
+      "DESCRIPTION:" + esc(eventNotes(ev)),
+      "END:VEVENT", "END:VCALENDAR",
+    ].join("\r\n");
+    const url = URL.createObjectURL(new Blob([ics], { type: "text/calendar;charset=utf-8" }));
+    const file = ((ev.name && ev.name.en) || "event-" + (index + 1)).toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    const a = el("a", "", { href: url, download: file + ".ics" });
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1500);
+  }
+
+  // ---------- 1. Couple: names written on an arch, drapes, lanterns ----------
+
+  function buildCouple(els) {
+    const n = names();
+    const scene = el("section", "scene couple", { "aria-labelledby": "couple-names" });
+    const stage = el("div", "scene__stage");
+    const wall = el("div", "layer couple__wall pattern pattern--buti");
+
+    const border = el("div", "couple__border vine-strip", { "aria-hidden": "true" });
+    border.style.backgroundImage = 'url("' + (els.borderTop || motif("border-vine")) + '")';
+
+    const drapes = ["l", "r"].map((s) => {
+      const d = el("div", "drape drape--" + s, { "aria-hidden": "true" });
+      d.innerHTML = M.drapeSVG();
+      return d;
+    });
+    const lanterns = ["l", "r"].map((s) => {
+      const l = el("div", "lantern lantern--" + s, { "aria-hidden": "true" });
+      const swing = el("div", "lantern__swing");
+      swing.innerHTML = M.lanternSVG();
+      l.appendChild(swing);
+      return l;
+    });
+
+    const a = archCard("green", "linen", "couple__arch");
+    a.crown.appendChild(deco(motif("bloom-stem"), "arch__bloom"));
+    const kicker = text("p", "couple__kicker caps", () => word("entryKicker"));
+    const h1 = el("h1", "couple__names script", { id: "couple-names", tabindex: "-1" });
+    const first = text("span", "write", () => t(n.first.name));
+    const amp = el("span", "write amp");
+    amp.textContent = "&";
+    const second = text("span", "write", () => t(n.second.name));
+    h1.append(first, amp, second);
+    const together = text("p", "couple__together", () => word("togetherWith"));
+    const date = Object.assign(el("p", "couple__date date-caps"), { textContent: dottedDate(W.weddingDate) });
+    const more = el("div", "couple__more");
+    more.append(text("p", "couple__invite", () => word("inviteLine")), text("p", "couple__city caps", () => t(W.city)));
+    a.inner.append(kicker, h1, together, date, more);
+
+    const sprigs = ["l", "r"].map((s) => deco(els.cornerFloral || motif("vine-sprig"), "couple__sprig couple__sprig--" + s));
+    const hint = el("div", "scroll-hint", { "aria-hidden": "true" });
+    hint.append(text("span", "", () => word("scrollHint")), el("i"));
+
+    stage.append(wall, border, drapes[0], drapes[1], lanterns[0], lanterns[1], a.card, sprigs[0], sprigs[1], hint);
+    scene.appendChild(stage);
+    return { scene, wall, border, drapes, lanterns, arch: a.card, kicker, writes: [first, amp, second], together, date, more, sprigs, hint };
+  }
+
+  // The hero moment of this section: the names write themselves in.
+  function namesTimeline(c) {
+    if (!window.gsap || reduceMotion) return null;
+    const tl = gsap.timeline({ paused: true, defaults: { ease: EASE } });
+    tl.from(c.arch, { autoAlpha: 0, y: 40, duration: 1.4 })
+      .from([c.lanterns, c.drapes], { autoAlpha: 0, duration: 1.4 }, 0)
+      .from(c.kicker, { autoAlpha: 0, y: 10, duration: 1 }, 0.7);
+    c.writes.forEach((w, i) => {
+      tl.fromTo(w,
+        { clipPath: "inset(-40% 100% -40% -15%)", filter: "blur(2px)" },
+        { clipPath: "inset(-40% -15% -40% -15%)", filter: "blur(0px)", duration: i === 1 ? 0.8 : 1.5 },
+        i === 0 ? 1.3 : ">-0.25");
+    });
+    tl.from([c.together, c.date], { autoAlpha: 0, y: 12, duration: 1.1, stagger: 0.35 }, ">-0.1")
+      .from(c.hint, { autoAlpha: 0, duration: 1 }, ">");
+    return tl;
+  }
+
+  // ---------- 2. A letter for the guest, drawn out of its envelope ----------
+
+  function buildLetter(els) {
+    const n = names();
+    const scene = el("section", "scene letter", { "aria-labelledby": "letter-greeting" });
+    const stage = el("div", "scene__stage");
+    const wall = el("div", "layer letter__wall pattern pattern--buti-blush");
+
+    const kickerTag = el("div", "letter__kicker tag-strip");
+    kickerTag.appendChild(text("p", "caps", () => word("letterKicker")));
+
+    const post = el("div", "post");
+    const back = el("div", "post__back", { "aria-hidden": "true" });
+    back.appendChild(el("div", "post__flap"));
+    const letter = el("div", "post__letter");
+    ["tl", "tr", "bl", "br"].forEach((c) => letter.appendChild(corner(els.cornerFloral, "letter__corner letter__corner--" + c)));
+    const greet = text("p", "letter__greet script", () => (guestName() ? word("greeting") : word("greetingAll")));
+    greet.id = "letter-greeting";
+    letter.append(
+      greet,
+      text("p", "letter__body", () => word("greetingBody")),
+      text("p", "letter__sign script", () => t(n.first.name) + " & " + t(n.second.name))
+    );
+    const front = el("div", "post__front", { "aria-hidden": "true" });
+    const seal = el("div", "post__seal");
+    bind(seal, () => (Array.from(t(n.first.name))[0] || "") + (Array.from(t(n.second.name))[0] || ""));
+    front.appendChild(seal);
+    post.append(back, letter, front);
+
+    stage.append(wall, kickerTag, post);
+    scene.appendChild(stage);
+    return { scene, wall, kicker: kickerTag, post, back, letter, front };
+  }
+
+  // ---------- 3. Countdown ----------
+
+  function buildCountdown() {
+    const section = el("section", "section countdown", { "aria-labelledby": "countdown-title" });
+    const wall = el("div", "layer countdown__wall pattern pattern--vine-green");
+    const panel = el("div", "countdown__panel");
+    const title = text("h2", "countdown__title caps", () => word("countdownTitle"));
+    title.id = "countdown-title";
+    const grid = el("div", "countdown__grid", { role: "timer", "aria-live": "off" });
+    const units = ["days", "hours", "minutes", "seconds"].map((key) => {
+      const tile = el("div", "tile");
+      const num = el("span", "tile__num");
+      num.textContent = "00";
+      tile.append(num, text("span", "tile__label", () => word(key)));
+      grid.appendChild(tile);
+      return { tile, num, value: null };
+    });
+    const done = text("p", "countdown__done script", () => word("countdownDone"));
+    done.hidden = true;
+    const when = el("p", "countdown__when date-caps");
+    when.textContent = dottedDate(W.weddingDate);
+    panel.append(title, grid, done, when, text("p", "countdown__city", () => t(W.city)));
+    section.append(wall, panel);
+
+    const target = new Date(W.weddingDate).getTime();
+    function tick() {
+      let s = Math.max(0, Math.floor((target - Date.now()) / 1000));
+      if (s <= 0) { grid.hidden = true; done.hidden = false; return false; }
+      const values = [Math.floor(s / 86400), Math.floor(s / 3600) % 24, Math.floor(s / 60) % 60, s % 60];
+      values.forEach((v, i) => {
+        const u = units[i];
+        if (u.value === v) return;
+        u.value = v;
+        u.num.textContent = String(v).padStart(2, "0");
+        if (window.gsap && !reduceMotion && u.seen) gsap.fromTo(u.num, { yPercent: -35, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.8, ease: EASE });
+        u.seen = true;
+      });
+      return true;
+    }
+    if (isNaN(target) || !tick()) { /* already begun */ } else setInterval(tick, 1000);
+
+    return { section, wall, panel, tiles: units.map((u) => u.tile) };
+  }
+
+  // ---------- 4. The celebrations: one room per event ----------
+
+  // Which frame colour suits each pattern, so gold and text always sit on solid colour.
+  const ROOM_FRAME = { harlequin: "maroon", pinstripe: "maroon", lattice: "green", vine: "green", damask: "green", checker: "maroon", buti: "maroon", "vine-green": "maroon", "buti-blush": "green" };
+  const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
+
+  function buildRooms(els) {
+    const events = W.events || [];
+    const wrap = el("section", "rooms", { "aria-labelledby": "rooms-title", id: "celebrations" });
+
+    const intro = el("div", "rooms__intro");
+    const strip = el("div", "rooms__border vine-strip", { "aria-hidden": "true" });
+    strip.style.backgroundImage = 'url("' + (els.borderTop || motif("border-vine")) + '")';
+    intro.appendChild(strip);
+    const tag = el("div", "tag rooms__tag");
+    const face = el("div", "tag__face");
+    const h2 = text("h2", "rooms__title caps", () => word("eventsTitle"));
+    h2.id = "rooms-title";
+    face.append(h2, text("p", "rooms__lede", () => word("eventsIntro")));
+    tag.appendChild(face);
+    const index = el("nav", "rooms__index", { "aria-label": "Celebrations" });
+    intro.append(tag, index);
+    wrap.appendChild(intro);
+
+    const rooms = events.map((ev, i) => {
+      const pattern = ev.pattern || "harlequin";
+      const room = el("article", "room", { id: "room-" + (i + 1), "aria-labelledby": "room-title-" + (i + 1) });
+      room.style.zIndex = String(i + 1);
+      const stage = el("div", "room__stage");
+      const wall = el("div", "layer room__wall pattern pattern--" + pattern);
+      const shade = el("div", "room__shade");
+      const sprigs = [deco(motif("vine-sprig"), "room__sprig room__sprig--a"), deco(motif("bloom-stem"), "room__sprig room__sprig--b")];
+
+      const a = archCard(ev.frame || ROOM_FRAME[pattern] || "maroon", "linen", "room__card");
+      a.crown.append(Object.assign(el("span", "room__numeral"), { textContent: ROMAN[i] || String(i + 1) }));
+      const name = text("h3", "room__name caps", () => t(ev.name));
+      name.id = "room-title-" + (i + 1);
+      const when = el("div", "room__when");
+      when.append(
+        Object.assign(el("p", "room__date date-caps"), { textContent: dottedDate(ev.start) }),
+        text("p", "room__time", () => longDate(ev.start) + " · " + timeRange(ev))
+      );
+      const where = el("div", "room__where");
+      where.append(text("p", "room__venue", () => t(ev.venue)));
+      if (ev.address) where.append(text("p", "room__address", () => t(ev.address)));
+      const parts = [name, Object.assign(el("div", "rule", { "aria-hidden": "true" }), { innerHTML: "<i></i>" }), when, where];
+      if (ev.dressCode) {
+        const dress = el("p", "room__dress");
+        dress.append(text("span", "caps", () => word("dressCode")), text("span", "", () => t(ev.dressCode)));
+        parts.push(dress);
+      }
+
+      const actions = el("div", "room__actions");
+      if (ev.map) {
+        const go = el("a", "btn btn--solid", { href: ev.map, target: "_blank", rel: "noopener" });
+        go.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-7.6 7-13a7 7 0 1 0-14 0c0 5.4 7 13 7 13Z" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="9" r="2.4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>';
+        go.appendChild(text("span", "", () => word("directions")));
+        actions.appendChild(go);
+      }
+      const cal = el("button", "btn btn--ghost", { type: "button", "aria-expanded": "false", "aria-controls": "cal-" + (i + 1) });
+      cal.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4" stroke="currentColor" stroke-width="1.4"/></svg>';
+      cal.appendChild(text("span", "", () => word("addToCalendar")));
+      const menu = el("div", "room__cal", { id: "cal-" + (i + 1) });
+      menu.hidden = true;
+      const google = el("a", "", { target: "_blank", rel: "noopener" });
+      bind(google, () => word("calendarGoogle"));
+      bindings.push(() => { google.href = googleCalendarUrl(ev); });
+      google.href = googleCalendarUrl(ev);
+      const apple = el("button", "", { type: "button" });
+      bind(apple, () => word("calendarOther"));
+      apple.addEventListener("click", () => downloadIcs(ev, i));
+      menu.append(google, apple);
+      cal.addEventListener("click", () => {
+        const open = menu.hidden;
+        menu.hidden = !open;
+        cal.setAttribute("aria-expanded", String(open));
+      });
+      actions.appendChild(cal);
+      parts.push(actions, menu);
+      a.inner.append(...parts);
+
+      stage.append(wall, sprigs[0], sprigs[1], a.card, shade);
+      room.appendChild(stage);
+      wrap.appendChild(room);
+
+      // Index chip: jump straight to this room.
+      const chip = el("a", "rooms__chip", { href: "#room-" + (i + 1) });
+      chip.append(text("span", "rooms__chip-name", () => t(ev.name)), Object.assign(el("span", "rooms__chip-date"), { textContent: dottedDate(ev.start).slice(0, 7) }));
+      chip.addEventListener("click", (e) => {
+        e.preventDefault();
+        const y = room.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top: y, behavior: reduceMotion ? "auto" : "smooth" });
+      });
+      index.appendChild(chip);
+
+      return { room, stage, wall, shade, sprigs, card: a.card };
+    });
+
+    return { wrap, intro, rooms };
+  }
+
+  // ---------- Footer ----------
+
+  function buildFooter() {
+    if (!features.credit || !W.credit || !W.credit.text) return null;
+    const footer = el("footer", "footer");
+    const p = el("p", "footer__credit");
+    if (W.credit.url) {
+      const a = el("a", "", { href: W.credit.url, rel: "noopener" });
+      a.textContent = W.credit.text;
+      p.appendChild(a);
+    } else {
+      p.textContent = W.credit.text;
+    }
+    footer.appendChild(p);
+    return footer;
+  }
 
   function buildPage(els) {
     const main = document.getElementById("main");
-    const n = names();
-
-    const couple = el("section", "couple", { "aria-labelledby": "couple-names" });
-    const panel = el("div", "couple__panel");
-    ["tl", "tr", "bl", "br"].forEach((c) => panel.appendChild(corner(els.cornerFloral, "couple__corner couple__corner--" + c)));
-    const h1 = el("h1", "couple__names script", { id: "couple-names", tabindex: "-1" });
-    const first = el("span"), amp = el("span", "amp"), second = el("span");
-    amp.textContent = "&";
-    bind(first, () => t(n.first.name));
-    bind(second, () => t(n.second.name));
-    h1.append(first, amp, second);
-    panel.append(
-      bind(el("p", "couple__kicker caps"), () => word("entryKicker")),
-      h1,
-      bind(el("p", "couple__together"), () => word("togetherWith")),
-      Object.assign(el("p", "couple__date date-caps"), { textContent: dottedDate(W.weddingDate) })
-    );
-    couple.appendChild(panel);
-    main.appendChild(couple);
-
-    if (features.credit && W.credit && W.credit.text) {
-      const footer = el("footer", "footer");
-      const p = el("p", "footer__credit");
-      if (W.credit.url) {
-        const a = el("a", "", { href: W.credit.url, rel: "noopener" });
-        a.textContent = W.credit.text;
-        p.appendChild(a);
-      } else {
-        p.textContent = W.credit.text;
-      }
-      footer.appendChild(p);
-      main.after(footer);
+    const parts = {};
+    parts.couple = buildCouple(els);
+    main.appendChild(parts.couple.scene);
+    parts.letter = buildLetter(els);
+    main.appendChild(parts.letter.scene);
+    if (features.countdown) {
+      parts.countdown = buildCountdown();
+      main.appendChild(parts.countdown.section);
     }
+    if ((W.events || []).length) {
+      parts.rooms = buildRooms(els);
+      main.appendChild(parts.rooms.wrap);
+    }
+    const footer = buildFooter();
+    if (footer) main.after(footer);
+    parts.names = namesTimeline(parts.couple);
+    return parts;
   }
 
-  function revealPage() {
+  // ---------- Scroll motion ----------
+
+  function setupScroll(parts) {
+    if (!fx) {
+      document.documentElement.classList.add("fx-static");
+      return;
+    }
+    gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.config({ ignoreMobileResize: true });
+    const scrub = 1.2; // the motion trails the thumb slightly, so it glides
+    const none = { ease: "none" };
+
+    // Couple: the parlour opens up around the names.
+    const c = parts.couple;
+    gsap.timeline({ defaults: none, scrollTrigger: { trigger: c.scene, start: "top top", end: "bottom bottom", scrub } })
+      .to(c.wall, { yPercent: -10 }, 0)
+      .to(c.border, { xPercent: -14 }, 0)
+      .to(c.drapes[0], { xPercent: -62, rotation: -3 }, 0)
+      .to(c.drapes[1], { xPercent: 62, rotation: 3 }, 0)
+      .to(c.lanterns[0], { yPercent: -34 }, 0)
+      .to(c.lanterns[1], { yPercent: -22 }, 0)
+      .to(c.arch, { scale: 0.94, yPercent: -3 }, 0)
+      .to(c.sprigs, { yPercent: -70 }, 0)
+      .to(c.hint, { autoAlpha: 0, duration: 0.12 }, 0)
+      .fromTo(c.more, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: EASE }, 0.12);
+
+    // Letter: it rises out of the envelope, then the envelope sinks away.
+    const L = parts.letter;
+    const envH = () => L.front.offsetHeight;
+    gsap.timeline({ defaults: none, scrollTrigger: { trigger: L.scene, start: "top top", end: "bottom bottom", scrub, invalidateOnRefresh: true } })
+      .fromTo(L.wall, { yPercent: 0 }, { yPercent: -10, duration: 1.4 }, 0)
+      .fromTo(L.post, { y: () => -envH() * 0.3 }, { y: 0, duration: 0.8 }, 0)
+      .fromTo(L.letter, { y: () => envH() * 0.96 }, { y: 0, duration: 0.8, ease: EASE }, 0)
+      .to(L.kicker, { autoAlpha: 0, y: -24, duration: 0.3 }, 0.15)
+      .to([L.back, L.front], { y: () => envH() * 1.5, autoAlpha: 0, duration: 0.45, ease: EASE }, 0.7)
+      .to({}, { duration: 0.25 });
+    // Before the guest reaches it, the letter waits tucked inside.
+    gsap.set(L.letter, { y: () => envH() * 0.96 });
+
+    // Countdown: tiles are laid on the table one by one.
+    if (parts.countdown) {
+      const cd = parts.countdown;
+      gsap.fromTo(cd.wall, { yPercent: -8 }, { yPercent: 8, ease: "none", scrollTrigger: { trigger: cd.section, start: "top bottom", end: "bottom top", scrub: true } });
+      gsap.fromTo(cd.panel, { y: 60 }, { y: 0, ease: "none", scrollTrigger: { trigger: cd.section, start: "top bottom", end: "top 30%", scrub } });
+      gsap.fromTo(cd.tiles, { yPercent: 50, autoAlpha: 0, rotationX: -50 }, { yPercent: 0, autoAlpha: 1, rotationX: 0, stagger: 0.2, ease: EASE, scrollTrigger: { trigger: cd.panel, start: "top 90%", end: "top 35%", scrub } });
+    }
+
+    // Rooms: each opens through an arch-shaped doorway over the last ("Room Change").
+    if (parts.rooms) {
+      const rooms = parts.rooms.rooms;
+      rooms.forEach((r, i) => {
+        gsap.fromTo(r.wall, { yPercent: -7 }, { yPercent: 7, ease: "none", scrollTrigger: { trigger: r.room, start: "top bottom", end: "bottom top", scrub: true } });
+        const arrive = gsap.timeline({ defaults: none, scrollTrigger: { trigger: r.room, start: "top bottom", end: "top top", scrub, invalidateOnRefresh: true } });
+        if (i > 0) {
+          arrive.fromTo(r.stage, { clipPath: "inset(18% 9% 0% 9% round 50% 50% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0% round 0% 0% 0% 0%)" }, 0);
+        }
+        arrive
+          .fromTo(r.card, { y: () => window.innerHeight * 0.2, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ease: EASE }, 0)
+          .fromTo(r.sprigs[0], { y: () => window.innerHeight * 0.45 }, { y: 0 }, 0)
+          .fromTo(r.sprigs[1], { y: () => window.innerHeight * 0.3 }, { y: 0 }, 0);
+        const next = rooms[i + 1];
+        if (next) {
+          gsap.timeline({ defaults: none, scrollTrigger: { trigger: next.room, start: "top bottom", end: "top top", scrub } })
+            .to(r.card, { scale: 0.9, yPercent: -5 }, 0)
+            .to(r.shade, { opacity: 0.5 }, 0);
+        }
+      });
+    }
+
+    bindings.push(() => ScrollTrigger.refresh());
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => ScrollTrigger.refresh());
+    window.addEventListener("load", () => ScrollTrigger.refresh());
+  }
+
+  let revealed = false;
+  function revealPage(parts) {
+    if (revealed) return;
+    revealed = true;
+    if (parts.names) parts.names.play();
     const heading = document.getElementById("couple-names");
     if (heading) heading.focus({ preventScroll: true });
     document.dispatchEvent(new CustomEvent("parlour:opened"));
@@ -503,19 +932,24 @@
   }
 
   async function start() {
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
     applyTheme();
     addDoorwayClip();
     setupLanguageToggle();
     const els = await loadElements();
-    buildPage(els);
+    const parts = buildPage(els);
     setLanguage(lang);
+    setupScroll(parts);
 
+    const reveal = () => revealPage(parts);
     const skipIntro = !features.entry || params.has("skipintro");
     if (skipIntro) {
+      document.body.classList.remove("is-locked");
       music.show();
-      revealPage();
+      reveal();
     } else {
-      runEntry(els, revealPage);
+      runEntry(els, reveal);
     }
   }
 

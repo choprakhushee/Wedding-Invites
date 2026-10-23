@@ -165,5 +165,73 @@
     return `<svg ${SVGNS} viewBox="0 0 24 24" aria-hidden="true"><path d="${shapes[i % 3]}" fill="${fill}" stroke="${GOLD}" stroke-width="0.8"/></svg>`;
   }
 
-  window.ParlourMotifs = { DOOR, doorwayClipPath, gateSVG, doorSVG, petalSVG };
+  // ---------- Arch card top ----------
+  // The cusped top of an arch panel, 200 × 100. Below it the card continues as a
+  // plain box (parlour.css .arch), whose 3% side padding matches the 6-unit frame here.
+  // Colours come from CSS: .arch__frame, .arch__face, .arch__line.
+
+  function archCapSVG() {
+    const outer = cuspedArch(0, 200, 92, 2, 4);
+    const face = cuspedArch(6, 194, 94, 10, 4);
+    const line = cuspedArch(9.5, 190.5, 95, 15, 4);
+    return `<svg ${SVGNS} class="arch__cap" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+  <path class="arch__frame" d="M0 100.5 V92 ${segsPath(outer)} V100.5 Z"/>
+  <path class="arch__face" d="M6 100.5 V94 ${segsPath(face)} V100.5 Z"/>
+  <path class="arch__line" d="M9.5 100.5 V95 ${segsPath(line)} V100.5" fill="none" stroke-width="1" vector-effect="non-scaling-stroke"/>
+</svg>`;
+  }
+
+  // ---------- Hanging lantern (jharokha lamp), 60 × 200 ----------
+
+  function lanternSVG() {
+    return `<svg ${SVGNS} viewBox="0 0 60 200" aria-hidden="true" focusable="false">
+  <defs><radialGradient id="lampGlow" cx=".5" cy=".55" r=".6"><stop offset="0" stop-color="#FFF1D2"/><stop offset=".6" stop-color="#F0CF92"/><stop offset="1" stop-color="#C9A56B"/></radialGradient></defs>
+  <path d="M30 0 V78" stroke="${GOLD}" stroke-width="1" stroke-dasharray="3 2.5"/>
+  <circle cx="30" cy="82" r="4" fill="none" stroke="${GOLD}" stroke-width="1.2"/>
+  <path d="M30 86 C22 94 14 98 12 108 H48 C46 98 38 94 30 86 Z" fill="#5C1A1B" stroke="${GOLD}" stroke-width="1"/>
+  <rect x="9" y="108" width="42" height="5" fill="#5C1A1B" stroke="${GOLD}" stroke-width="1"/>
+  <path d="M13 113 H47 L44 160 H16 Z" fill="url(#lampGlow)"/>
+  <g fill="none" stroke="#7A5C2E" stroke-width="0.9">
+    <path d="M22 156 V128 C22 121 26 118 30 115 C34 118 38 121 38 128 V156"/>
+    <path d="M13 113 L16 160 M47 113 L44 160"/>
+  </g>
+  <path d="M13 113 H47 L44 160 H16 Z" fill="none" stroke="${GOLD}" stroke-width="1.1"/>
+  <rect x="13" y="160" width="34" height="5" fill="#5C1A1B" stroke="${GOLD}" stroke-width="1"/>
+  <path d="M17 165 C20 175 26 178 30 186 C34 178 40 175 43 165 Z" fill="#5C1A1B" stroke="${GOLD}" stroke-width="1"/>
+  <path d="M30 186 V194" stroke="${GOLD}" stroke-width="1"/><circle cx="30" cy="196.5" r="2.5" fill="${GOLD}"/>
+</svg>`;
+  }
+
+  // ---------- Velvet drape, tied back, 160 × 800 (left side; mirror for the right) ----------
+
+  function drapeSVG() {
+    const edge = "M150 0 C142 170 72 370 48 470 C72 566 118 690 134 800";
+    const folds = [
+      "M28 18 C30 200 30 380 34 466 C40 600 30 700 24 800",
+      "M60 18 C62 200 48 390 40 468 C60 600 66 700 66 800",
+      "M96 18 C96 190 64 390 44 470 C80 600 96 700 100 800",
+      "M126 18 C120 170 70 380 46 470",
+    ].map((d) => `<path d="${d}"/>`).join("");
+    return `<svg ${SVGNS} viewBox="0 0 160 800" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="velvet" x1="0" x2="1"><stop offset="0" stop-color="#3E1011"/><stop offset=".45" stop-color="#5C1A1B"/><stop offset=".8" stop-color="#6E2223"/><stop offset="1" stop-color="#4A1415"/></linearGradient>
+  </defs>
+  <path d="M0 0 H150 C142 170 72 370 48 470 C72 566 118 690 134 800 H0 Z" fill="url(#velvet)"/>
+  <g fill="none" stroke="#3A0E0F" stroke-width="5" stroke-linecap="round" opacity=".55">${folds}</g>
+  <g fill="none" stroke="#8A3434" stroke-width="1.6" opacity=".45">${folds}</g>
+  <path d="${edge}" fill="none" stroke="${GOLD}" stroke-width="4"/>
+  <path d="${edge}" fill="none" stroke="#5C1A1B" stroke-width="1.2" stroke-dasharray="2 5"/>
+  <rect x="0" y="0" width="160" height="20" fill="#5C1A1B"/>
+  <path d="M0 20 H160" stroke="${GOLD}" stroke-width="1.5"/>
+  <path d="M0 26 ${Array.from({ length: 16 }, (_, i) => `Q${i * 10 + 5} 34 ${i * 10 + 10} 26`).join(" ")}" fill="none" stroke="${GOLD}" stroke-width="1.2"/>
+  <g fill="${GOLD}" stroke="#7A5C2E" stroke-width=".8">
+    <path d="M6 462 C30 452 58 456 66 468 C58 480 30 484 6 474 Z"/>
+    <path d="M58 472 C66 490 64 504 60 512 C56 504 54 490 58 472 Z"/>
+    <path d="M52 512 H68 L72 560 H48 Z"/>
+  </g>
+  <path d="M50 520 V556 M55 520 V558 M60 520 V558 M65 520 V556" stroke="#7A5C2E" stroke-width=".8"/>
+</svg>`;
+  }
+
+  window.ParlourMotifs = { DOOR, doorwayClipPath, gateSVG, doorSVG, petalSVG, archCapSVG, lanternSVG, drapeSVG };
 })();
