@@ -6,6 +6,11 @@ Google Sheet they can edit themselves.
 
 Demo: https://choprakhushee.github.io/Wedding-Invites/invites/prerna-weds-sumit/
 
+Palace Parlour portfolio demo (one self-contained file, no image or audio assets):
+https://choprakhushee.github.io/Wedding-Invites/invites/meher-weds-kabir/
+Personalise it with `?guest=Name`, e.g. `?guest=Sharma%20Family`. All of its words, dates,
+colours and links live in the `CONFIG` object at the top of its script.
+
 ## How it's organised
 
 ```
