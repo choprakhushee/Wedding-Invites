@@ -152,10 +152,10 @@ html:not([lang="en"]) .scroll-hint { font-family: var(--font-regional), var(--fo
 
 .doorway {
   position: absolute;
-  left: 17.19%;
-  width: 67.19%;
-  top: 8.07%;
-  height: 83.33%;
+  left: 16.02%;
+  width: 68.36%;
+  top: 8.85%;
+  height: 82.29%;
   perspective: 1100px;
 }
 .doorway__glow {
@@ -201,13 +201,19 @@ html:not([lang="en"]) .scroll-hint { font-family: var(--font-regional), var(--fo
 
 .sway { position: absolute; will-change: transform; }
 .sway .slot { inset: 0; }
-.sway--thoranam { left: 14%; width: 72%; top: 7.4%; height: 9.8%; transform-origin: 50% 0; animation: sway 7s var(--ease) infinite alternate; }
-.sway--leaf-left, .sway--leaf-right { bottom: 4%; width: 22%; height: 39.2%; filter: brightness(.62) saturate(.8); animation: sway-leaf 9s var(--ease) infinite alternate; }
-.sway--leaf-left { left: -8%; transform-origin: 50% 100%; }
-.sway--leaf-right { right: -8%; transform-origin: 50% 100%; animation-delay: -4.5s; }
+.sway--thoranam { left: 14%; width: 72%; top: 7.4%; height: 9.8%; transform-origin: 50% 0; animation: ripple 5.5s var(--ease) infinite alternate; }
+.sway--plant-left, .sway--plant-right { bottom: 3%; width: 30%; height: 39.5%; transform-origin: 50% 100%; filter: brightness(.55) saturate(.85); animation: bend 8s var(--ease) infinite alternate; }
+.sway--plant-left { left: -12%; }
+.sway--plant-right { right: -12%; animation-delay: -4s; animation-duration: 9s; }
+/* A plant bends from its base: the top travels, the roots stay put. */
+@keyframes bend {
+  0%   { transform: rotate(-.4deg) skewX(.9deg); }
+  45%  { transform: rotate(.5deg) skewX(-1.3deg); }
+  100% { transform: rotate(-.2deg) skewX(.5deg); }
+}
 
 @keyframes sway { from { rotate: -.7deg; } to { rotate: .7deg; } }
-@keyframes sway-leaf { from { rotate: -1.4deg; } to { rotate: 1.2deg; } }
+@keyframes ripple { 0% { transform: skewX(-1deg); } 50% { transform: skewX(.8deg) scaleY(1.01); } 100% { transform: skewX(-.4deg); } }
 @keyframes leaf { from { rotate: -5deg; } to { rotate: 5deg; } }
 
 /* Darkness with a hole of lamplight that grows from the flame (--r). */
@@ -436,23 +442,56 @@ body.is-dark .fab { opacity: 0; pointer-events: none; }
 
 /* The thoranam runs across the top in overlapping lengths, each stirring on its own. */
 .cy-garland { position: absolute; top: 0; left: -2vw; right: -2vw; display: flex; justify-content: center; }
-.garland-seg { position: relative; flex: 0 0 auto; width: var(--segw); aspect-ratio: 1400 / 289; margin: 0 calc(var(--segw) * -.04); transform-origin: 50% 0; }
+.garland-seg { position: relative; flex: 0 0 auto; width: var(--segw); aspect-ratio: 1400 / 289; margin: 0 calc(var(--segw) * -.1); transform-origin: 50% 0; }
 .garland-seg .slot { inset: 0; }
 
-.wind { will-change: transform; }
-.cy-leaf {
+.wind { will-change: transform; backface-visibility: hidden; }
+.wind img { image-rendering: auto; }
+
+/* Life in the sky: sun rays, drifting clouds, light on the water, birds and a
+   far-off fall of petals. All of it sits behind the pillars and the veil. */
+.cy-sky { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.cy-rays {
   position: absolute;
-  width: var(--lw);
-  aspect-ratio: 374 / 1000;
-  top: calc(var(--lw) * -2.674 + var(--gh) * .4);
-  transform-origin: 50% 100%;
+  inset: -10% -10% 30% 30%;
+  background: repeating-conic-gradient(from 200deg at 78% 12%, rgba(255, 238, 196, 0) 0deg, rgba(255, 238, 196, .26) 3deg, rgba(255, 238, 196, 0) 8deg, rgba(255, 238, 196, 0) 13deg);
+  -webkit-mask-image: radial-gradient(circle at 78% 12%, #000 5%, transparent 60%);
+  mask-image: radial-gradient(circle at 78% 12%, #000 5%, transparent 60%);
+  animation: rays 11s var(--ease) infinite alternate;
 }
-.cy-leaf .slot { inset: 0; }
-.cy-leaf, .floor__plant { filter: saturate(.82) brightness(.9) hue-rotate(-6deg); }
-.cy-leaf--tl { --lw: clamp(58px, min(15vw, 17vh), 150px); left: calc(var(--pw) * .5 - var(--lw) / 2); transform: rotate(150deg); }
-.cy-leaf--tl2 { --lw: clamp(46px, min(11vw, 13vh), 115px); left: calc(var(--pw) * 1.1 - var(--lw) / 2); transform: rotate(166deg); }
-.cy-leaf--tr { --lw: clamp(58px, min(15vw, 17vh), 150px); right: calc(var(--pw) * .5 - var(--lw) / 2); transform: rotate(-150deg); }
-.cy-leaf--tr2 { --lw: clamp(46px, min(11vw, 13vh), 115px); right: calc(var(--pw) * 1.1 - var(--lw) / 2); transform: rotate(-166deg); }
+@keyframes rays { from { opacity: .35; rotate: -1.5deg; } to { opacity: .9; rotate: 1.5deg; } }
+.cy-cloud {
+  position: absolute;
+  left: 0;
+  width: 46vw;
+  height: 13vw;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 249, 238, .55), rgba(255, 249, 238, 0));
+  animation: cloud 110s linear infinite;
+}
+.cy-cloud--a { top: 5%; animation-delay: -40s; }
+.cy-cloud--b { top: 17%; width: 34vw; height: 9vw; animation-duration: 150s; animation-delay: -110s; opacity: .8; }
+@keyframes cloud { from { translate: -50vw 0; } to { translate: 110vw 0; } }
+.cy-water {
+  position: absolute;
+  left: -5%;
+  right: -5%;
+  bottom: 0;
+  height: 30%;
+  background: repeating-linear-gradient(to bottom, transparent 0 10px, rgba(255, 250, 230, .2) 10px 11.5px, transparent 11.5px 19px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 35%, #000 80%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 35%, #000 80%, transparent);
+  animation: water 6s var(--ease) infinite alternate;
+}
+@keyframes water { from { translate: -14px 0; opacity: .5; } to { translate: 14px 2px; opacity: 1; } }
+.bird { position: absolute; left: 0; top: 0; width: calc(22px * var(--size, 1)); aspect-ratio: 24 / 10; will-change: transform; }
+.bird svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.bird__wings { fill: #5b3a2c; opacity: .7; transform-box: fill-box; transform-origin: 50% 70%; animation: flap var(--flap, .8s) ease-in-out infinite alternate; }
+@keyframes flap { from { scale: 1 1; } 60% { scale: 1 -.35; } to { scale: 1 -.5; } }
+.far-petal { position: absolute; left: 0; top: 0; width: 7px; height: 9px; border-radius: 60% 40% 55% 45% / 65% 55% 45% 35%; filter: blur(.5px); will-change: transform, opacity; }
+.far-petal--jasmine { background: #fffaf0; }
+.far-petal--marigold { background: #f6a11c; }
+.far-petal--rose { background: #e2486c; }
 
 .strand {
   --sw: clamp(18px, 3vw, 34px);
@@ -647,8 +686,9 @@ body.is-dark .fab { opacity: 0; pointer-events: none; }
 .floor__flowers { inset: 0; }
 .floor-flower { position: absolute; width: calc(17px * var(--s)); aspect-ratio: 1; }
 .floor-flower--pink .jf-petals { fill: #f1c2c0; }
-.floor__plant { left: calc(var(--pw) * .1 - var(--lw) / 2); bottom: 55%; --lw: clamp(56px, min(14vw, 15vh), 130px); width: var(--lw); aspect-ratio: 374 / 1000; transform-origin: 50% 100%; transform: rotate(18deg); }
-.floor__plant--2 { --lw: clamp(46px, min(11vw, 12vh), 105px); transform: rotate(38deg); }
+.floor__plant { bottom: 34%; width: clamp(130px, min(32vw, 34vh), 380px); aspect-ratio: 557 / 1100; transform-origin: 50% 100%; }
+.floor__plant--left { left: calc(var(--pw) * -.6); }
+.floor__plant--right { right: calc(var(--pw) * -.6); }
 .floor__plant .slot { inset: 0; }
 .lamp { bottom: 6%; height: var(--lh); aspect-ratio: 288 / 1000; cursor: pointer; filter: drop-shadow(0 8px 10px rgba(42, 26, 18, .35)); }
 .lamp .slot { inset: 0; }
