@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@600;700&amp;family=IM+Fell+English:ital@0;1&amp;family=Pinyon+Script&amp;family=Playfair+Display:wght@900&amp;display=swap');
+    .sc{font-family:'Cormorant SC',Georgia,serif;font-weight:700;letter-spacing:4px}
+    .fell{font-family:'IM Fell English',Georgia,serif}
+    .mast{font-family:'Playfair Display',Georgia,serif;font-weight:900}
+    .script{font-family:'Pinyon Script',cursive}
+  </style>
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6eedc"/><stop offset="1" stop-color="#e9dcc0"/></linearGradient>
+    <radialGradient id="vig" cx=".5" cy=".45" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#6b4a20" stop-opacity=".28"/></radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EFE0B0"/><stop offset=".5" stop-color="#A88743"/><stop offset="1" stop-color="#E6D39A"/></linearGradient>
+    <filter id="ink"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="1" seed="4"/><feDisplacementMap in="SourceGraphic" scale="1.8" xChannelSelector="R" yChannelSelector="G"/></filter>
+  </defs>
+  <rect width="1200" height="630" fill="#C6B3D9"/>
+  <rect x="36" y="30" width="1128" height="570" fill="url(#paper)"/>
+  <rect x="36" y="30" width="1128" height="570" fill="url(#vig)"/>
+  <g fill="#2a221c" filter="url(#ink)">
+    <text x="80" y="82" class="sc" font-size="20">VOL. MMXXVII · NO. 17</text>
+    <text x="1120" y="82" class="sc" font-size="20" text-anchor="end">PRICE: ONE SMILE</text>
+    <rect x="80" y="96" width="1040" height="2"/>
+    <text x="600" y="186" class="mast" font-size="80" text-anchor="middle" textLength="1000" lengthAdjust="spacingAndGlyphs">THE CHANDRIKA CHRONICLE</text>
+    <rect x="80" y="210" width="1040" height="5"/><rect x="80" y="220" width="1040" height="1.6"/>
+    <text x="600" y="256" class="fell" font-style="italic" font-size="26" text-anchor="middle">❦  Special Wedding Edition · Spring, 2027  ❦</text>
+    <rect x="80" y="274" width="1040" height="1.6"/>
+    <text x="600" y="344" class="mast" font-size="50" text-anchor="middle" textLength="940" lengthAdjust="spacingAndGlyphs">THE DIAMOND OF THE SEASON TO WED!</text>
+  </g>
+  <text x="600" y="476" class="script" font-size="118" text-anchor="middle" fill="#1F2A44">Tara &amp; Aarav</text>
+  <g fill="#2a221c">
+    <text x="600" y="540" class="sc" font-size="24" text-anchor="middle">17 · 04 · 2027   |   MYSURU   |   #THETARASEASON</text>
+  </g>
+  <g transform="translate(600,560)" fill="none" stroke="url(#gold)" stroke-width="2">
+    <path d="M-170,8 C-110,8 -90,-4 -40,4 M170,8 C110,8 90,-4 40,4"/><path d="M0,-4 C5,2 6,6 0,16 C-6,6 -5,2 0,-4Z" fill="url(#gold)"/>
+  </g>
+</svg>

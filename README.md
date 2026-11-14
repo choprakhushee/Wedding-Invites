@@ -6,6 +6,8 @@ Google Sheet they can edit themselves.
 
 Demo: https://choprakhushee.github.io/Wedding-Invites/invites/prerna-weds-sumit/
 
+The Royal Season (single-file, fully drawn in code): https://choprakhushee.github.io/Wedding-Invites/invites/tara-weds-aarav/ (see its README for editing and media slots)
+
 ## How it's organised
 
 ```
