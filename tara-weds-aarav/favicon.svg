@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A88743"/><stop offset=".4" stop-color="#EFE0B0"/><stop offset=".7" stop-color="#C2A15B"/><stop offset="1" stop-color="#A88743"/></linearGradient></defs>
+  <circle cx="32" cy="32" r="31" fill="#1F2A44"/>
+  <circle cx="32" cy="32" r="28" fill="none" stroke="url(#g)" stroke-width="1.5"/>
+  <g fill="url(#g)"><path d="M20 24 18 11 25 17 32 8 39 17 46 11 44 24Z"/><rect x="19.5" y="24.5" width="25" height="3.4" rx="1"/>
+    <circle cx="18" cy="10" r="1.8"/><circle cx="32" cy="7" r="2"/><circle cx="46" cy="10" r="1.8"/></g>
+  <text x="32" y="50" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="18" fill="url(#g)">T&amp;A</text>
+</svg>
