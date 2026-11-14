@@ -283,7 +283,11 @@ const CONFIG = {
       const img = new Image();
       img.alt = '';
       img.decoding = 'async';
-      img.onload = () => { m.prepend(img); m.classList.add('ok'); };
+      // decode off-screen first, so showing a big image never stalls a scroll frame
+      img.onload = () => {
+        const show = () => { m.prepend(img); m.classList.add('ok'); };
+        img.decode ? img.decode().then(show, show) : show();
+      };
       img.onerror = () => tryImg(list.slice(1));
       img.src = list[0];
     };
@@ -763,8 +767,8 @@ const CONFIG = {
       <div class="ln parents">${esc(B.parents)}<span class="place">${esc(B.place)}</span><span class="amp">&amp;</span>${esc(G.parents)}<span class="place">${esc(G.place)}</span></div>
       <div class="ln names-gold"><div class="gname foil g1">${esc(B.first)}</div><span class="gamp">&amp;</span><div class="gname foil g2">${esc(G.first)}</div></div>`);
     panel.append(pin);
-    kb.append(panel);
-    bg.append(kb);
+    // the text panel sits beside (not inside) the zooming layer, so the text is never re-drawn per frame
+    bg.append(kb, panel);
     const deco = el('div', 'deco'); deco.style.cssText = 'position:absolute;inset:0;pointer-events:none';
     const pL = cut('pillar', 'pillar l'), pR = cut('pillar', 'pillar r');
     const crest = cut('roof-crest', 'crest');
@@ -961,11 +965,44 @@ const CONFIG = {
   /* =====================================================================
      LAYOUT
      ===================================================================== */
-  let V = innerHeight, F = Math.round(V * 0.09), W = stage.clientWidth;
+  // V  = cover height: the largest viewport (phone address bar hidden). Frames are this tall, so the
+  //      screen is always filled and nothing jumps when the bar slides away mid-scroll.
+  // VS = visible height: the smallest viewport (bar shown). Text and buttons are laid out inside it.
+  // S  = type scale, 1 at a 390×844 phone, so laptop and phone keep the same proportions.
+  const probe = el('div');
+  probe.style.cssText = 'position:fixed;top:0;left:-10px;width:1px;height:100lvh;visibility:hidden;pointer-events:none';
+  doc.body.append(probe);
+  let V = innerHeight, VS = innerHeight, F = Math.round(V * 0.09), W = stage.clientWidth, S = 1;
   function measure() {
-    V = innerHeight; F = Math.round(V * 0.09); W = stage.clientWidth;
+    probe.style.height = '100lvh';
+    const lvh = probe.offsetHeight;
+    probe.style.height = '100svh';
+    const svh = probe.offsetHeight;
+    V = Math.round(Math.max(lvh || 0, innerHeight));
+    VS = Math.round(Math.min(svh || innerHeight, innerHeight));
+    F = Math.round(V * 0.09);
+    W = stage.clientWidth;
+    S = clamp(Math.min(W / 390, VS / 844), 0.74, 1.15);
     root.style.setProperty('--V', V + 'px');
+    root.style.setProperty('--VS', VS + 'px');
     root.style.setProperty('--F', F + 'px');
+    root.style.setProperty('--s', S.toFixed(4));
+  }
+  // Shrink a box's type (via a local --s) until its content fits, in both directions.
+  function fitBox(box, minK = 0.7) {
+    box.style.removeProperty('--s');
+    let k = 1;
+    for (let n = 0; n < 4; n++) {
+      const needH = box.scrollHeight, haveH = box.clientHeight, needW = box.scrollWidth, haveW = box.clientWidth;
+      if (needH <= haveH + 1 && needW <= haveW + 1) break;
+      k = clamp(k * Math.min(haveH / needH, haveW / needW) * 0.985, minK, 1);
+      box.style.setProperty('--s', (S * k).toFixed(4));
+      if (k === minK) break;
+    }
+  }
+  function fitBoxes() {
+    [...$$('.card .body', sE.track), $('.rbody', sR.el), sS.text, sC.bride.info, sC.groom.info, $('.wrap', sK.el), sX.text]
+      .filter(Boolean).forEach(b => fitBox(b));
   }
   function sizeSections() {
     if (!MOTION) return;
@@ -1005,9 +1042,9 @@ const CONFIG = {
     const L = pL, R = pR, T = pT + off, Bt = pB + off;
     const A = C.layout.cutoutAspect;
     // pillars hug the panel edges
-    const ph = fh * 1.02, pw = ph / A.pillar;
-    Object.assign(sD.pL.style, { height: ph + 'px', width: pw + 'px', left: (L - 10 - pw) + 'px', top: (-fh * 0.01) + 'px' });
-    Object.assign(sD.pR.style, { height: ph + 'px', width: pw + 'px', left: (R + 10) + 'px', top: (-fh * 0.01) + 'px' });
+    const ph = V * 1.02, pw = ph / A.pillar;
+    Object.assign(sD.pL.style, { height: ph + 'px', width: pw + 'px', left: (L - 10 - pw) + 'px', top: (-V * 0.01) + 'px' });
+    Object.assign(sD.pR.style, { height: ph + 'px', width: pw + 'px', left: (R + 10) + 'px', top: (-V * 0.01) + 'px' });
     // roof crest over the top of the panel
     const cw = Math.min(fw * 0.9, 440), ch = cw * A['roof-crest'];
     const eave = T + Math.min(26, fh * 0.03);
@@ -1052,6 +1089,7 @@ const CONFIG = {
     layoutClock();
     [sT.nameSvg, sD.invitesSvg, sS.tSvg].forEach(fitScriptSVG);
     layoutDoorway();
+    fitBoxes();
     petalsT && petalsT.resize();
     petalsX && petalsX.resize();
   }
@@ -1157,7 +1195,7 @@ const CONFIG = {
   const target = new Date(C.muhurtham).getTime();
   function setDigits(numEl, value) {
     const n = +numEl.dataset.n, s = String(value).padStart(n, '0').slice(-n);
-    $$('.strip', numEl).forEach((st, i) => { st.style.transform = `translateY(${-(+s[i]) * 34}px)`; });
+    $$('.strip', numEl).forEach((st, i) => { st.style.transform = `translateY(${-(+s[i])}em)`; });
     numEl.setAttribute('aria-label', String(value));
   }
   function updateCount() {
@@ -1256,12 +1294,21 @@ const CONFIG = {
       .to(opener, { opacity: 0, duration: 0.75, ease: 'sine.inOut' }, 1.75)
       .add(introTemple, 1.55);
   }
+  // After the opener, quietly load and decode the remaining scenes one by one while the guest is
+  // reading, so nothing has to load at the moment a scene rises into view.
+  function preloadRest() {
+    const idle = window.requestIdleCallback || (fn => setTimeout(fn, 120));
+    const queue = scenes.slice(1).map(s => s.el);
+    const next = () => { const n = queue.shift(); if (!n) return; loadAllIn(n); idle(next, { timeout: 900 }); };
+    setTimeout(() => idle(next, { timeout: 900 }), 600);
+  }
   function finishOpen() {
     clockOn = false;
     opener.remove();
     root.classList.remove('locked');
     if (lenis) lenis.start();
     if (petalsT) petalsT.start();
+    preloadRest();
     if (MOTION) window.ScrollTrigger.refresh();
     musicBtn.focus({ preventScroll: true });
   }
@@ -1302,32 +1349,52 @@ const CONFIG = {
     const sceneTriggers = [];
     // refresh() reverts scrubbed animations; put every scene back to the pose for the current scroll
     ScrollTrigger.addEventListener('refresh', () => sceneTriggers.forEach(st => st.animation && st.animation.progress(1).progress(st.progress)));
-    // lead: start this fraction of a screen early, so content arrives with the rising card instead of after it
-    const sceneTL = (i, build, lead = 0) => {
+    // scroll-scrubbed work only runs while a scene is pinned (its frame is not moving under the finger)
+    const sceneTL = (i, build) => {
       const tl = gsap.timeline({ defaults: { ease: 'none' } });
       build(tl);
       tl.progress(1).progress(0); // render through and back so every "from" state is applied before the scene starts
       sceneTriggers.push(ScrollTrigger.create({
-        animation: tl, scrub: 0.6,
-        start: () => sceneStart(i) - lead * V, end: () => sceneStart(i) + scenes[i].a * V,
+        animation: tl, scrub: 0.5,
+        start: () => sceneStart(i), end: () => sceneStart(i) + scenes[i].a * V,
         invalidateOnRefresh: true
       }));
       return tl;
     };
-    // blur-to-sharp on desktop; phones get rise + fade only (a scrubbed blur repaints every frame)
+    // entrances play on time (not tied to scroll) once a rising card is ~60% up, so they stay
+    // smooth while the browser scrolls the card natively; they rewind if you scroll back above it
+    const arrival = (i, build, at = 0.42) => {
+      const tl = gsap.timeline({ paused: true, defaults: { ease: 'power2.out' } });
+      build(tl);
+      tl.progress(1).progress(0);
+      ScrollTrigger.create({
+        start: () => scenes[i].el.offsetTop - V * at, end: 'max', invalidateOnRefresh: true,
+        onEnter: () => tl.timeScale(1).play(), onLeaveBack: () => tl.timeScale(1.8).reverse()
+      });
+      return tl;
+    };
+    // blur-to-sharp on desktop; phones get rise + fade only (a blur repaints every frame)
     const B0 = isMobile ? {} : { filter: 'blur(6px)' }, B1 = isMobile ? {} : { filter: 'blur(0px)' };
     const textIn = (tl, targets, at, dur = 0.12, stagger = 0) =>
       tl.fromTo(targets, Object.assign({ opacity: 0, y: 16 }, B0), Object.assign({ opacity: 1, y: 0, duration: dur, stagger, ease: 'power2.out' }, B1), at);
+    const riseIn = (tl, targets, at, dur = 0.9, stagger = 0) =>
+      tl.fromTo(targets, Object.assign({ opacity: 0, y: 18 }, B0), Object.assign({ opacity: 1, y: 0, duration: dur, stagger, ease: 'power3.out' }, B1), at);
 
-    // rising transitions: the next scene slides over, the last one recedes and darkens
+    // rising transitions: the next card is moved only by the browser's own scrolling; the scene
+    // underneath (pinned, not moving) recedes and darkens
     scenes.forEach((s, i) => {
       if (!i) return;
       const prev = scenes[i - 1];
       gsap.timeline({
-        scrollTrigger: { start: () => s.el.offsetTop - V, end: () => s.el.offsetTop + F, scrub: true, invalidateOnRefresh: true }
+        scrollTrigger: {
+          start: () => s.el.offsetTop - V, end: () => s.el.offsetTop + F, scrub: true, invalidateOnRefresh: true,
+          toggleClass: { targets: s.frame, className: 'feather' }, // mask only while rising
+          // once fully covered, the scene underneath stops painting and animating until you scroll back
+          onLeave: () => setCovered(prev, true), onEnterBack: () => setCovered(prev, false)
+        }
       })
-        .fromTo(prev.cam, { scale: 1, y: 0 }, { scale: 0.9, y: -V * 0.04, ease: 'power1.in' }, 0)
-        .fromTo(prev.dim, { opacity: 0 }, { opacity: 0.62, ease: 'power1.in' }, 0);
+        .fromTo(prev.cam, { scale: 1 }, { scale: 0.92, ease: 'sine.in' }, 0)
+        .fromTo(prev.dim, { opacity: 0 }, { opacity: 0.6, ease: 'sine.in' }, 0);
     });
 
     // Scene 2: camera tilts from sky to roof, layers at different speeds
@@ -1346,16 +1413,30 @@ const CONFIG = {
       const lines = $$('.ln', pin);
       gsap.set(lines, { opacity: 0 });
       const inv = { p: 0 };
+      // each line plays on its own timing as the scroll passes its point (and rewinds going back),
+      // so nothing is redrawn per scroll frame
+      const step = (at, build) => {
+        const tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+        build(tl);
+        tl.progress(1).progress(0);
+        ScrollTrigger.create({
+          start: () => sceneStart(1) + at * sD.a * V, end: 'max', invalidateOnRefresh: true,
+          onEnter: () => tl.timeScale(1).play(), onLeaveBack: () => tl.timeScale(2).reverse()
+        });
+      };
+      step(0, tl => { riseIn(tl, $('.bless', pin), 0, 0.9); riseIn(tl, $('.orn', pin), 0.35, 0.7); });
+      step(0.07, tl => { tl.fromTo($('.cordially', pin), { opacity: 0, y: 12, scaleX: 0.9 }, { opacity: 1, y: 0, scaleX: 1, duration: 0.9 }, 0); });
+      step(0.15, tl => {
+        tl.set($('.inv', pin), { opacity: 1 }, 0)
+          .fromTo(inv, { p: 0 }, { p: 1, duration: 1.7, ease: 'power1.inOut', onUpdate: () => setScriptProgress(sD.invitesSvg, inv.p) }, 0);
+      });
+      step(0.33, tl => { riseIn(tl, $('.copy', pin), 0, 1); });
+      step(0.5, tl => { riseIn(tl, $('.parents', pin), 0, 1); });
+      step(0.66, tl => {
+        tl.set($('.names-gold', pin), { opacity: 1 }, 0)
+          .fromTo($$('.names-gold > *', pin), Object.assign({ opacity: 0, y: 14, scaleX: 0.88 }, B0), Object.assign({ opacity: 1, y: 0, scaleX: 1, duration: 1, stagger: 0.18 }, B1), 0);
+      });
       sceneTL(1, tl => {
-        textIn(tl, $('.bless', pin), 0.02, 0.1);
-        textIn(tl, $('.orn', pin), 0.1, 0.06);
-        tl.fromTo($('.cordially', pin), { opacity: 0, y: 12, scaleX: 0.9 }, { opacity: 1, y: 0, scaleX: 1, duration: 0.1, ease: 'power2.out' }, 0.14);
-        tl.set($('.inv', pin), { opacity: 1 }, 0.22)
-          .fromTo(inv, { p: 0 }, { p: 1, duration: 0.2, ease: 'power1.inOut', onUpdate: () => setScriptProgress(sD.invitesSvg, inv.p) }, 0.22);
-        textIn(tl, $('.copy', pin), 0.44, 0.12);
-        textIn(tl, $('.parents', pin), 0.58, 0.12);
-        tl.set($('.names-gold', pin), { opacity: 1 }, 0.72);
-        tl.fromTo($$('.names-gold > *', pin), Object.assign({ opacity: 0, y: 14, scaleX: 0.88 }, B0), Object.assign({ opacity: 1, y: 0, scaleX: 1, duration: 0.1, stagger: 0.04, ease: 'power2.out' }, B1), 0.72);
         tl.fromTo(sD.pL, { y: () => V * 0.03 }, { y: () => -V * 0.03, duration: 1 }, 0)
           .fromTo(sD.pR, { y: () => V * 0.03 }, { y: () => -V * 0.03, duration: 1 }, 0)
           .fromTo(sD.crest, { y: 0 }, { y: () => -V * 0.015, duration: 1 }, 0);
@@ -1368,55 +1449,53 @@ const CONFIG = {
       });
     }
 
-    // Scene 4: mandapam caption
-    sceneTL(2, tl => {
-      textIn(tl, sM.cap, 0.05, 0.4);
-      tl.to(sM.bg, { yPercent: -4, duration: 1 }, 0);
-    }, 0.3);
+    // Scene 4: mandapam
+    sceneTL(2, tl => { tl.to(sM.bg, { yPercent: -4, duration: 1 }, 0); });
+    arrival(2, tl => { riseIn(tl, sM.cap, 0.3, 1.2); });
 
     // Scene 5: bride & groom slide in from opposite sides
-    sceneTL(3, tl => {
-      tl.fromTo(sC.head, { opacity: 0, y: 14, scaleX: 0.9 }, { opacity: 1, y: 0, scaleX: 1, duration: 0.15, ease: 'power2.out' }, 0)
-        .fromTo(sC.bride.a, { xPercent: -115, rotate: -3, opacity: 0.3 }, { xPercent: 0, rotate: 0, opacity: 1, duration: 0.42, ease: 'power3.out' }, 0.02)
-        .fromTo(sC.groom.a, { xPercent: 115, rotate: 3, opacity: 0.3 }, { xPercent: 0, rotate: 0, opacity: 1, duration: 0.42, ease: 'power3.out' }, 0.1)
-        .fromTo(sC.lamp, { y: () => V * 0.12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out' }, 0.32);
-      textIn(tl, [sC.bride.info, sC.groom.info], 0.46, 0.18, 0.08);
-    }, 0.6);
+    arrival(3, tl => {
+      tl.fromTo(sC.head, { opacity: 0, y: 12, scaleX: 0.92 }, { opacity: 1, y: 0, scaleX: 1, duration: 0.8 }, 0)
+        .fromTo(sC.bride.a, { xPercent: -112, rotate: -2.5, opacity: 0 }, { xPercent: 0, rotate: 0, opacity: 1, duration: 1.25, ease: 'power3.out' }, 0.1)
+        .fromTo(sC.groom.a, { xPercent: 112, rotate: 2.5, opacity: 0 }, { xPercent: 0, rotate: 0, opacity: 1, duration: 1.25, ease: 'power3.out' }, 0.28)
+        .fromTo(sC.lamp, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power2.out' }, 0.75);
+      riseIn(tl, [sC.bride.info, sC.groom.info], 0.95, 0.9, 0.15);
+    });
 
-    // Scene 6: our story, word by word
+    // Scene 6: our story; the frame and title arrive, then the words follow the scroll
     {
       const t = { p: 0 };
+      arrival(4, tl => {
+        tl.fromTo(sS.big, { y: 26, scale: 0.97, opacity: 0.6 }, { y: 0, scale: 1, opacity: 1, duration: 1 }, 0)
+          .fromTo(t, { p: 0 }, { p: 1, duration: 1.8, ease: 'power1.inOut', onUpdate: () => setScriptProgress(sS.tSvg, t.p) }, 0.3);
+      });
       sceneTL(4, tl => {
-        tl.fromTo(sS.big, { y: () => V * 0.05, scale: 0.97 }, { y: 0, scale: 1, duration: 0.15, ease: 'power2.out' }, 0)
-          .fromTo(t, { p: 0 }, { p: 1, duration: 0.16, onUpdate: () => setScriptProgress(sS.tSvg, t.p) }, 0.02)
-          .fromTo(sS.words, { opacity: 0.12 }, { opacity: 1, duration: 0.05, stagger: 0.68 / sS.words.length }, 0.16)
-          .fromTo(sS.base, { yPercent: 45 }, { yPercent: 0, duration: 0.95, ease: 'power1.out' }, 0);
-      }, 0.45);
+        tl.fromTo(sS.words, { opacity: 0.2 }, { opacity: 1, duration: 0.05, stagger: 0.8 / sS.words.length }, 0.02)
+          .fromTo(sS.base, { yPercent: 35 }, { yPercent: 0, duration: 0.95, ease: 'power1.out' }, 0);
+      });
     }
 
     // Scene 7: countdown tiles rise
-    sceneTL(5, tl => {
-      textIn(tl, $$('.reveal', sK.wrap), 0, 0.3, 0.06);
-    }, 0.55);
+    arrival(5, tl => { riseIn(tl, $$('.reveal', sK.wrap), 0.1, 0.9, 0.1); });
 
     // Scene 8: ceremonies glide in
-    sceneTL(6, tl => {
-      tl.fromTo(sE.head, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }, 0)
-        .fromTo(sE.track, { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.6, ease: 'power2.out' }, 0.05);
-    }, 0.55);
+    arrival(6, tl => {
+      riseIn(tl, sE.head, 0, 0.8);
+      tl.fromTo(sE.track, { opacity: 0, x: 50 }, { opacity: 1, x: 0, duration: 1.1, ease: 'power3.out' }, 0.2);
+    });
 
     // Scene 9: the RSVP card rises out of the lamp-lit night
-    sceneTL(7, tl => {
-      tl.fromTo(sR.card, { y: () => V * 0.08, opacity: 0.4 }, { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }, 0)
-        .to(sR.bg, { yPercent: -3, duration: 1 }, 0);
-      textIn(tl, Array.from(sR.body.children), 0.1, 0.25, 0.04);
-    }, 0.45);
+    sceneTL(7, tl => { tl.to(sR.bg, { yPercent: -3, duration: 1 }, 0); });
+    arrival(7, tl => {
+      tl.fromTo(sR.card, { y: 30, opacity: 0.5 }, { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }, 0);
+      riseIn(tl, Array.from(sR.body.children), 0.2, 0.8, 0.06);
+    });
 
     // Scene 10: sign-off
-    sceneTL(8, tl => {
-      tl.fromTo(sX.couple, { yPercent: 14, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }, 0);
-      textIn(tl, Array.from(sX.text.children), 0.15, 0.3, 0.1);
-    }, 0.5);
+    arrival(8, tl => {
+      tl.fromTo(sX.couple, { yPercent: 10, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 1.4, ease: 'power3.out' }, 0);
+      riseIn(tl, Array.from(sX.text.children), 0.35, 1, 0.18);
+    });
     ScrollTrigger.create({
       start: () => sX.el.offsetTop - V * 0.2, end: 'max',
       onEnter: () => petalsX && petalsX.shower(isMobile ? 26 : 44)
@@ -1427,9 +1506,9 @@ const CONFIG = {
     gsap.ticker.add(() => {
       const now = performance.now(), dt = Math.min(0.05, (now - lastT) / 1000);
       lastT = now;
-      if (petalsT && petalsT.running) petalsT.step(dt);
+      if (petalsT && petalsT.running && !sT.covered) petalsT.step(dt);
       if (petalsX && petalsX.running) petalsX.step(dt);
-      if (sD.el.classList.contains('live')) stepBells(dt);
+      if (sD.el.classList.contains('live') && !sD.covered) stepBells(dt);
     });
     const onScroll = () => {
       const y = lenis ? lenis.scroll : scrollY;
@@ -1441,6 +1520,12 @@ const CONFIG = {
       updateCurrent(y);
     };
     if (lenis) lenis.on('scroll', onScroll); else addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  function setCovered(s, on) {
+    s.covered = on;
+    s.el.classList.toggle('covered', on);
+    s.frame.style.visibility = on ? 'hidden' : '';
   }
 
   let lastRing = 0;
@@ -1530,7 +1615,7 @@ const CONFIG = {
     if (MOTION) ScrollTrigger.refresh();
     root.classList.add('ready');
     // late font files (e.g. the Malayalam subset) change line lengths: refit when they land
-    if (doc.fonts) doc.fonts.addEventListener('loadingdone', () => { [sT.nameSvg, sD.invitesSvg, sS.tSvg].forEach(fitScriptSVG); layoutDoorway(); });
+    if (doc.fonts) doc.fonts.addEventListener('loadingdone', () => { [sT.nameSvg, sD.invitesSvg, sS.tSvg].forEach(fitScriptSVG); layoutDoorway(); fitBoxes(); });
     addEventListener('load', () => { layoutDoorway(); if (MOTION) ScrollTrigger.refresh(); });
   });
 
