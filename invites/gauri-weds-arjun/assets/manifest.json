@@ -1,0 +1,353 @@
+{
+  "project": "gauri-weds-arjun",
+  "theme": "Kalyanam at the Temple Town",
+  "generator": "Canva generate-image (+ remove-background for cutouts)",
+  "style_reference_media_id": "MAHa4wpQGgs",
+  "style_reference_link": "https://www.canva.com/M/MAHa4wpQGgs",
+  "shared_style_suffix": "Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+  "export_design": {
+    "id": "DAHa43jpvGo",
+    "note": "Working design with one page per asset, exported as JPG (scenes) and transparent PNG (cutouts) into assets/raw."
+  },
+  "optimisation": "sharp: scenes 1080x1920 WebP + JPG fallback <350KB; cutouts trimmed WebP with alpha <150KB; particles 128px.",
+  "assets": [
+    {
+      "name": "temple-sky",
+      "kind": "scene",
+      "purpose": "Scene 2 background (master style anchor). Top ~45% open sky for the names.",
+      "files": [
+        "temple-sky.webp",
+        "temple-sky.jpg"
+      ],
+      "aspect_ratio": "PORTRAIT_9_16",
+      "prompt": "Keep the look but regenerate without the couple, with a bit more open sky. Same Kerala temple with red tiled sloping roofs and gold finials, tall brass flag mast beside it, palm trees, glowing golden sunset; no people anywhere; empty stone courtyard with brass lamps; the TOP 45% of the frame is open glowing sky with nothing in it, so the temple sits lower in the frame. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa4wpQGgs",
+      "canva_link": "https://www.canva.com/M/MAHa4wpQGgs",
+      "image_reference": "https://www.canva.com/M/MAHa45wsebs",
+      "notes": "Reference: first draft MAHa45wsebs (rejected: unrequested couple)."
+    },
+    {
+      "name": "clock-bg",
+      "kind": "scene",
+      "purpose": "Scene 1 opener. SVG hands pivot on the brass boss at x=52.9%, y=49.5%; numeral ring radius ~22% of width.",
+      "files": [
+        "clock-bg.webp",
+        "clock-bg.jpg"
+      ],
+      "aspect_ratio": "PORTRAIT_9_16",
+      "prompt": "An ornate antique wall clock filling the frame, carved dark temple-wood frame with brass and gold ornament, jasmine flowers around it, ivory dial with Roman numerals and NO HANDS (empty dial centre with only a small brass centre boss), dial perfectly centred in the frame, straight-on front view. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa45z-pGE",
+      "canva_link": "https://www.canva.com/M/MAHa45z-pGE",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    },
+    {
+      "name": "temple-doorway-bg",
+      "kind": "scene",
+      "purpose": "Scene 3 back layer; the blank ivory panel (x 23-77%, y 17-77%) holds the invitation text.",
+      "files": [
+        "temple-doorway-bg.webp",
+        "temple-doorway-bg.jpg"
+      ],
+      "aspect_ratio": "PORTRAIT_9_16",
+      "prompt": "Back layer of a Kerala temple doorway seen straight on: carved dark-wood door frame and interior in warm lamplight, with a large plain smooth IVORY panel in the centre occupying about 60% of the width and most of the height, completely blank and evenly lit, for invitation text. No bells, no garlands, no people. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa4zbBC8g",
+      "canva_link": "https://www.canva.com/M/MAHa4zbBC8g",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    },
+    {
+      "name": "mandapam",
+      "kind": "scene",
+      "purpose": "Scene 4 full-screen interlude.",
+      "files": [
+        "mandapam.webp",
+        "mandapam.jpg"
+      ],
+      "aspect_ratio": "PORTRAIT_9_16",
+      "prompt": "A Kerala wedding mandapam with a red-and-gold fabric canopy on carved wooden posts, tall brass lamps lit, jasmine garlands hanging, banana-stem and coconut-frond decorations, the red-tiled temple glimpsed through the arch behind. No people. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa45SByMU",
+      "canva_link": "https://www.canva.com/M/MAHa45SByMU",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    },
+    {
+      "name": "bride",
+      "kind": "scene",
+      "purpose": "Scene 5 left arch portrait (fictional person).",
+      "files": [
+        "bride.webp",
+        "bride.jpg"
+      ],
+      "aspect_ratio": "PORTRAIT_9_16",
+      "prompt": "Portrait of a fictional young Kerala bride in an ivory-and-gold kasavu saree with a gold border, traditional temple gold jewellery (necklaces, jhumkas), jasmine flowers in her hair, three-quarter view, gentle natural smile, hands relaxed out of frame, softly blurred warm temple courtyard background with brass lamps. Graceful and natural. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa47oTXCE",
+      "canva_link": "https://www.canva.com/M/MAHa47oTXCE",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    },
+    {
+      "name": "groom",
+      "kind": "scene",
+      "purpose": "Scene 5 right arch portrait (fictional person).",
+      "files": [
+        "groom.webp",
+        "groom.jpg"
+      ],
+      "aspect_ratio": "PORTRAIT_9_16",
+      "prompt": "Portrait of a fictional young Kerala groom wearing an ivory mundu and melmundu with gold kasavu border, bare-shouldered traditional style with the melmundu draped over one shoulder, a thick jasmine garland around his neck, three-quarter view, calm warm smile, hands out of frame, softly blurred warm temple courtyard background with brass lamps, light matching a golden-hour bride portrait. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa41BajCc",
+      "canva_link": "https://www.canva.com/M/MAHa41BajCc",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    },
+    {
+      "name": "temple-base",
+      "kind": "scene",
+      "purpose": "Scene 6, rises at the bottom of the Our Story frame.",
+      "files": [
+        "temple-base.webp",
+        "temple-base.jpg"
+      ],
+      "aspect_ratio": "PORTRAIT_9_16",
+      "prompt": "Wide granite temple stone steps rising gently, a long row of small lit brass oil lamps along the edge of each step, scattered jasmine and marigold petals, soft mist drifting low, the top half of the frame fading into warm hazy golden light. No people. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa49alco0",
+      "canva_link": "https://www.canva.com/M/MAHa49alco0",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    },
+    {
+      "name": "temple-night",
+      "kind": "scene",
+      "purpose": "Scene 9 venue & RSVP background.",
+      "files": [
+        "temple-night.webp",
+        "temple-night.jpg"
+      ],
+      "aspect_ratio": "PORTRAIT_9_16",
+      "prompt": "The same Kerala temple at night with red tiled sloping roofs and gold finials, lit by hundreds of glowing oil lamps on brass lamp towers and along the walls (vilakku), warm orange lamplight against a deep blue twilight sky with a few stars, palm silhouettes, gentle haze. No people. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa4_SsLCU",
+      "canva_link": "https://www.canva.com/M/MAHa4_SsLCU",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    },
+    {
+      "name": "og-image",
+      "kind": "share",
+      "purpose": "Share preview background; names are overlaid by code to make og-image.jpg (1200x630).",
+      "files": [
+        "og-bg.jpg",
+        "og-image.jpg"
+      ],
+      "aspect_ratio": "LANDSCAPE_16_9",
+      "prompt": "Wide panoramic view of a Kerala temple red tiled roofline with gold finials at golden hour, palms on the far left and far right, the roofline low in the frame, a large calm open glowing sky area in the centre for names. No people. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa43g80jo",
+      "canva_link": "https://www.canva.com/M/MAHa43g80jo",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    },
+    {
+      "name": "bell",
+      "kind": "cutout",
+      "purpose": "Scene 3 swinging bells (pivot = top centre of chain).",
+      "files": [
+        "bell.webp"
+      ],
+      "aspect_ratio": "SQUARE_1_1",
+      "prompt": "One single polished brass Kerala temple bell hanging on a short brass chain, front view, chain top at the top centre, isolated alone in the centre on a plain flat light cream background, nothing else in frame, product-shot clarity. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa4ymE4yQ",
+      "canva_link": "https://www.canva.com/M/MAHa4ymE4yQ",
+      "canva_source_before_bg_removal": "https://www.canva.com/M/MAHa44r3H50",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    },
+    {
+      "name": "garland-swag",
+      "kind": "cutout",
+      "purpose": "Scene 3 top swag; also Scene 5/6 frames.",
+      "files": [
+        "garland-swag.webp"
+      ],
+      "aspect_ratio": "LANDSCAPE_2_1",
+      "prompt": "A lush garland of white jasmine buds woven with red roses, hanging in one single smooth curved swag from the top-left corner to the top-right corner, isolated on a plain flat light cream background, nothing else in frame. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa477zlTo",
+      "canva_link": "https://www.canva.com/M/MAHa477zlTo",
+      "canva_source_before_bg_removal": "https://www.canva.com/M/MAHa4_BAcfI",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    },
+    {
+      "name": "garland-strand",
+      "kind": "cutout",
+      "purpose": "Hanging strands (Scene 3, 5, 6); sway from top.",
+      "files": [
+        "garland-strand.webp"
+      ],
+      "aspect_ratio": "PORTRAIT_1_2",
+      "prompt": "One single vertical hanging strand of white jasmine buds, straight from the top edge down, ending in one red rose at the bottom, centred, isolated on a plain flat light cream background, nothing else in frame. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa4zoY7y0",
+      "canva_link": "https://www.canva.com/M/MAHa4zoY7y0",
+      "canva_source_before_bg_removal": "https://www.canva.com/M/MAHa455oBNU",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    },
+    {
+      "name": "pillar",
+      "kind": "cutout",
+      "purpose": "Scene 3 left pillar; mirrored by code for the right.",
+      "files": [
+        "pillar.webp"
+      ],
+      "aspect_ratio": "PORTRAIT_1_2",
+      "prompt": "One single carved dark-wood Kerala temple pillar with polished brass bands and a carved capital and base, full height from top edge to bottom edge, straight-on front view, centred, isolated on a plain flat light cream background, nothing else in frame. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa4xiSPQs",
+      "canva_link": "https://www.canva.com/M/MAHa4xiSPQs",
+      "canva_source_before_bg_removal": "https://www.canva.com/M/MAHa4zw8-Vk",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    },
+    {
+      "name": "roof-crest",
+      "kind": "cutout",
+      "purpose": "Scene 3 top gable.",
+      "files": [
+        "roof-crest.webp"
+      ],
+      "aspect_ratio": "LANDSCAPE_2_1",
+      "prompt": "The front triangular gable of a Kerala temple roof with terracotta red tiles, carved wooden gable panel and a gold finial on top, straight-on symmetrical front view, centred, isolated on a plain flat light cream background, nothing else in frame. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa4y1lBQU",
+      "canva_link": "https://www.canva.com/M/MAHa4y1lBQU",
+      "canva_source_before_bg_removal": "https://www.canva.com/M/MAHa438bWTU",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    },
+    {
+      "name": "nilavilakku",
+      "kind": "cutout",
+      "purpose": "Scene 5 centre lamp; flames are coded on top (wick plate at ~22% from top).",
+      "files": [
+        "nilavilakku.webp"
+      ],
+      "aspect_ratio": "PORTRAIT_1_2",
+      "prompt": "One tall polished brass Kerala nilavilakku oil lamp with a round base and tiered stem, five lit wicks with small warm flames, front view, centred, full lamp visible, isolated on a plain flat light cream background, nothing else in frame. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa44wE9bQ",
+      "canva_link": "https://www.canva.com/M/MAHa44wE9bQ",
+      "canva_source_before_bg_removal": "https://www.canva.com/M/MAHa46_2ApM",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    },
+    {
+      "name": "palm-leaves",
+      "kind": "cutout",
+      "purpose": "Scene 2 foreground parallax layer.",
+      "files": [
+        "palm-leaves.webp"
+      ],
+      "aspect_ratio": "SQUARE_1_1",
+      "prompt": "A cluster of green coconut palm fronds radiating from the lower left corner and sweeping across, backlit by warm golden light, isolated on a plain flat light cream background, nothing else in frame, for a foreground parallax layer. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa42ZHo60",
+      "canva_link": "https://www.canva.com/M/MAHa42ZHo60",
+      "canva_source_before_bg_removal": "https://www.canva.com/M/MAHa4_ZXhdY",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    },
+    {
+      "name": "jasmine-flower",
+      "kind": "particle",
+      "purpose": "Petal particle sprite (128px).",
+      "files": [
+        "jasmine-flower.webp"
+      ],
+      "aspect_ratio": "SQUARE_1_1",
+      "prompt": "One single small white jasmine flower, fully open with five petals, top view, centred, isolated on a plain flat light grey background, nothing else in frame. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa4z_U6uc",
+      "canva_link": "https://www.canva.com/M/MAHa4z_U6uc",
+      "canva_source_before_bg_removal": "https://www.canva.com/M/MAHa45vcuT4",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    },
+    {
+      "name": "rose-petal",
+      "kind": "particle",
+      "purpose": "Petal particle sprite (128px).",
+      "files": [
+        "rose-petal.webp"
+      ],
+      "aspect_ratio": "SQUARE_1_1",
+      "prompt": "One single deep red rose petal, slightly curled, top view, centred, isolated on a plain flat light cream background, nothing else in frame. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa44w7Mpg",
+      "canva_link": "https://www.canva.com/M/MAHa44w7Mpg",
+      "canva_source_before_bg_removal": "https://www.canva.com/M/MAHa48AZH9o",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    },
+    {
+      "name": "couple-cutout",
+      "kind": "cutout",
+      "purpose": "Scene 10 sign-off (same fictional people as bride/groom).",
+      "files": [
+        "couple-cutout.webp"
+      ],
+      "aspect_ratio": "PORTRAIT_3_4",
+      "prompt": "The same fictional bride and groom from the reference portraits standing together side by side, full upper body to knees, she in the ivory-and-gold kasavu saree with temple gold jewellery and jasmine in her hair, he in the ivory mundu and melmundu with a jasmine garland, both wearing jasmine garlands, smiling gently, bodies turned slightly toward each other, centred, isolated on a plain flat light cream background, nothing else in frame. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa45APFwM",
+      "canva_link": "https://www.canva.com/M/MAHa45APFwM",
+      "canva_source_before_bg_removal": "https://www.canva.com/M/MAHa40KRaJU",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs",
+      "notes": "References: bride MAHa47oTXCE, groom MAHa41BajCc, style MAHa4wpQGgs."
+    },
+    {
+      "name": "icon-mehendi",
+      "kind": "icon",
+      "purpose": "Ceremony card icon: Mehendi & Sangeet.",
+      "files": [
+        "icon-mehendi.webp"
+      ],
+      "aspect_ratio": "SQUARE_1_1",
+      "prompt": "A mehendi henna cone with a few henna leaves, delicate gold-line illustration on ivory, fine single-weight gold line art, minimal and elegant, centred icon, plain flat ivory background, nothing else. Kerala temple wedding, Guruvayur-inspired, warm golden palette (polished brass and gold on ivory). Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa4748YYI",
+      "canva_link": "https://www.canva.com/M/MAHa4748YYI",
+      "canva_source_before_bg_removal": "https://www.canva.com/M/MAHa46gBiSA",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    },
+    {
+      "name": "icon-haldi",
+      "kind": "icon",
+      "purpose": "Ceremony card icon: Haldi.",
+      "files": [
+        "icon-haldi.webp"
+      ],
+      "aspect_ratio": "SQUARE_1_1",
+      "prompt": "A small round brass haldi pot (kindi) filled with turmeric paste with a turmeric root and a mango leaf beside it, delicate gold-line illustration on ivory, fine single-weight gold line art, minimal and elegant, centred icon, plain flat ivory background, nothing else. Kerala temple wedding, Guruvayur-inspired, warm golden palette (polished brass and gold on ivory). Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa41YU61s",
+      "canva_link": "https://www.canva.com/M/MAHa41YU61s",
+      "canva_source_before_bg_removal": "https://www.canva.com/M/MAHa4-11Tho",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    },
+    {
+      "name": "icon-sadya",
+      "kind": "icon",
+      "purpose": "Ceremony card icon: Sadya.",
+      "files": [
+        "icon-sadya.webp"
+      ],
+      "aspect_ratio": "SQUARE_1_1",
+      "prompt": "A plantain (banana) leaf laid flat with a traditional Kerala sadya: small mounds of rice and several curries, a banana and pappadam, delicate gold-line illustration on ivory, fine single-weight gold line art, minimal and elegant, centred icon, plain flat ivory background, nothing else. Kerala temple wedding, Guruvayur-inspired, warm golden palette (polished brass and gold on ivory). Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa417VuXc",
+      "canva_link": "https://www.canva.com/M/MAHa417VuXc",
+      "canva_source_before_bg_removal": "https://www.canva.com/M/MAHa47_jpw0",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    },
+    {
+      "name": "icon-thali",
+      "kind": "icon",
+      "purpose": "Ceremony card icon: Muhurtham (garland & thali).",
+      "files": [
+        "icon-thali.webp"
+      ],
+      "aspect_ratio": "SQUARE_1_1",
+      "prompt": "A round jasmine garland (varamala) encircling a small gold thali pendant on a yellow thread, delicate gold-line illustration on ivory, fine single-weight gold line art, minimal and elegant, centred icon, plain flat ivory background, nothing else. Kerala temple wedding, Guruvayur-inspired, warm golden palette (polished brass and gold on ivory). Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa4zOF25g",
+      "canva_link": "https://www.canva.com/M/MAHa4zOF25g",
+      "canva_source_before_bg_removal": "https://www.canva.com/M/MAHa48IR9gU",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    },
+    {
+      "name": "icon-lamp",
+      "kind": "icon",
+      "purpose": "Ceremony card icon: Reception.",
+      "files": [
+        "icon-lamp.webp"
+      ],
+      "aspect_ratio": "SQUARE_1_1",
+      "prompt": "A tall Kerala brass nilavilakku lamp with lit flames and soft radiating light lines, delicate gold-line illustration on ivory, fine single-weight gold line art, minimal and elegant, centred icon, plain flat ivory background, nothing else. Kerala temple wedding, Guruvayur-inspired, warm golden palette (polished brass and gold on ivory). Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa4-HOPlI",
+      "canva_link": "https://www.canva.com/M/MAHa4-HOPlI",
+      "canva_source_before_bg_removal": "https://www.canva.com/M/MAHa456GHvw",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+    }
+  ]
+}
