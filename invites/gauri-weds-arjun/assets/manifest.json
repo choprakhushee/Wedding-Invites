@@ -160,11 +160,12 @@
         "garland-swag.webp"
       ],
       "aspect_ratio": "LANDSCAPE_2_1",
-      "prompt": "A lush garland of white jasmine buds woven with red roses, hanging in one single smooth curved swag from the top-left corner to the top-right corner, isolated on a plain flat light cream background, nothing else in frame. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
-      "canva_media_id": "MAHa477zlTo",
-      "canva_link": "https://www.canva.com/M/MAHa477zlTo",
-      "canva_source_before_bg_removal": "https://www.canva.com/M/MAHa4_BAcfI",
-      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+      "prompt": "A thick garland made of exactly the same pure white jasmine buds as the reference strand, with deep red roses at intervals, hanging in one deep U-shaped swag: both ends at the top-left and top-right corners, the lowest point dipping to the bottom-centre of the frame. Bright white jasmine, soft neutral daylight, isolated on a plain flat medium grey background, nothing else in frame, photorealistic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa4xrItYg",
+      "canva_link": "https://www.canva.com/M/MAHa4xrItYg",
+      "canva_source_before_bg_removal": "https://www.canva.com/M/MAHa4-1kzIk",
+      "image_reference": "https://www.canva.com/M/MAHa45sYmN8",
+      "notes": "v2 (white jasmine) after review. v1 MAHa477zlTo read yellow. Reference = white strand so both garlands match."
     },
     {
       "name": "garland-strand",
@@ -174,11 +175,12 @@
         "garland-strand.webp"
       ],
       "aspect_ratio": "PORTRAIT_1_2",
-      "prompt": "One single vertical hanging strand of white jasmine buds, straight from the top edge down, ending in one red rose at the bottom, centred, isolated on a plain flat light cream background, nothing else in frame. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
-      "canva_media_id": "MAHa4zoY7y0",
-      "canva_link": "https://www.canva.com/M/MAHa4zoY7y0",
-      "canva_source_before_bg_removal": "https://www.canva.com/M/MAHa455oBNU",
-      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
+      "prompt": "One single vertical hanging strand of pure snow-white jasmine buds (bright white, not yellow or cream), straight from the top edge down, ending in one deep red rose at the bottom, centred, isolated on a plain flat medium grey background, nothing else in frame. Kerala temple wedding, Guruvayur-inspired, photorealistic with a soft painterly finish, warm golden-hour light, rich saturated colour (temple red, terracotta roof tiles, polished brass and gold, jasmine white, ivory, deep green), gentle haze, cinematic, ultra-detailed. Absolutely no text, letters, signboards, watermarks or logos.",
+      "canva_media_id": "MAHa48Hjarg",
+      "canva_link": "https://www.canva.com/M/MAHa48Hjarg",
+      "canva_source_before_bg_removal": "https://www.canva.com/M/MAHa45sYmN8",
+      "image_reference": "https://www.canva.com/M/MAHa4wpQGgs",
+      "notes": "v2 (white jasmine) after review. v1 MAHa4zoY7y0 read yellow."
     },
     {
       "name": "pillar",
@@ -349,5 +351,6 @@
       "canva_source_before_bg_removal": "https://www.canva.com/M/MAHa456GHvw",
       "image_reference": "https://www.canva.com/M/MAHa4wpQGgs"
     }
-  ]
+  ],
+  "video_loops": "Not generated: Canva video generation is not available on the current Canva plan. Scenes use the still image with code-driven motion."
 }
