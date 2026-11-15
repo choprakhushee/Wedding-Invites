@@ -1,0 +1,19 @@
+<!doctype html>
+<!-- Renders the 1200x630 share image: open with ?bg=../assets/og-base.jpg and screenshot at 1200x630 (tools/og.js does this). -->
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cormorant+SC:wght@500&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #2a1626; }
+  .bg { position: absolute; inset: 0; background-size: cover; background-position: center 28%; }
+  .bg::after { content: ""; position: absolute; inset: 0; background: radial-gradient(60% 70% at 50% 42%, rgba(40,12,24,.42), rgba(40,12,24,.1) 70%), linear-gradient(to bottom, rgba(40,12,24,.25), transparent 40%, rgba(40,12,24,.45)); }
+  .t { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fbf6ee; text-align: center; text-shadow: 0 2px 18px rgba(60,15,30,.7); }
+  .sc { font-family: "Cormorant SC"; letter-spacing: .32em; font-size: 26px; color: #f2e2b0; }
+  .n { font-family: "Pinyon Script"; font-size: 132px; line-height: 1.1; padding: 0 30px; }
+  .d { font-family: "Playfair Display"; font-style: italic; font-size: 30px; letter-spacing: .12em; }
+  .frame { position: absolute; inset: 18px; border: 1.5px solid rgba(242,226,176,.75); }
+  .frame::after { content: ""; position: absolute; inset: 7px; border: 1px solid rgba(242,226,176,.4); }
+</style></head>
+<body><div class="bg" id="bg"></div><div class="frame"></div>
+<div class="t"><div class="sc">The Rishta of the Season</div><div class="n" id="n">Myra &amp; Aryaman</div><div class="d" id="d">12 · 02 · 2028 · Jaipur</div></div>
+<script>const p = new URLSearchParams(location.search); document.getElementById('bg').style.backgroundImage = `url(${p.get('bg') || '../assets/palace-sky.jpg'})`; if (p.get('names')) document.getElementById('n').textContent = p.get('names'); if (p.get('date')) document.getElementById('d').textContent = p.get('date');</script>
+</body></html>

@@ -113,7 +113,7 @@
       const y = 6 + i * 11, x = 50 + (i % 2 ? 3 : -3);
       s += `<g transform="translate(${x} ${y}) rotate(${i * 37})"><ellipse cx="0" cy="-4" rx="3" ry="5" fill="#fffdf6"/><ellipse cx="4" cy="1" rx="3" ry="5" transform="rotate(72)" fill="#fbf7ea"/><ellipse cx="-4" cy="1" rx="3" ry="5" transform="rotate(-72)" fill="#fbf7ea"/><circle r="1.6" fill="#e6d79a"/></g>`;
     }
-    s += `<g transform="translate(50 180)"><circle r="16" fill="#b31d2f"/><path d="M-10 -4 C-6 -14 6 -14 10 -4 C6 4 -6 4 -10 -4Z" fill="#d23447"/><path d="M-6 -2 C-2 -8 4 -8 6 -2" stroke="#7d0f1e" fill="none"/><path d="M-14 4 C-8 14 8 14 14 4" stroke="#8a1424" fill="none"/></g>`;
+    s += `<g transform="translate(50 172) scale(.6)"><circle r="16" fill="#a8293a"/><path d="M-10 -4 C-6 -14 6 -14 10 -4 C6 4 -6 4 -10 -4Z" fill="#c9485a"/><path d="M-6 -2 C-2 -8 4 -8 6 -2" stroke="#7d0f1e" fill="none"/><path d="M-14 4 C-8 14 8 14 14 4" stroke="#8a1424" fill="none"/></g>`;
     return svg('0 0 100 200', s);
   };
 
