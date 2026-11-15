@@ -181,6 +181,9 @@ const CONFIG = {
         if (img.dataset.alt) { const a = img.dataset.alt; img.removeAttribute('data-alt'); img.src = a; return; }
         img.removeEventListener('error', onErr);
         const key = img.dataset.art;
+        // purely decorative overlays are left out rather than drawn, so a photo never sits next to a cartoon
+        const decor = img.closest('[data-decor]');
+        if (decor) { decor.remove(); root.dispatchEvent(new CustomEvent('mediafail', { detail: key })); return; }
         if (key && artFor[key]) { const span = document.createElement('div'); span.innerHTML = artFor[key](); img.replaceWith(span.firstElementChild); }
         else img.remove();
         root.dispatchEvent(new CustomEvent('mediafail', { detail: key }));
@@ -247,6 +250,11 @@ const CONFIG = {
       self.diyas = $$('.diya-glow', sec);
       self.glints = new FX.Glints($('[data-glints]', sec), { regions: [A.thaal.silver], count: 140, size: 14, sharp: 14, grid: 0.02 });
       // velvet sheen is masked to the box shape when the cutout loads
+      // never mix a photo with a drawing: if only the closed box photo exists, use it for both states
+      let openFailed = false;
+      const useClosedForOpen = () => { const closed = $('.box-closed img.ok', sec), open = $('.box-open', sec); if (openFailed && closed) { open.innerHTML = ''; open.appendChild(closed.cloneNode()); } };
+      sec.addEventListener('mediafail', (e) => { if (e.detail === 'box-open') { openFailed = true; useClosedForOpen(); } });
+      sec.addEventListener('medialoaded', (e) => { if (e.detail.closest('.box-closed')) useClosedForOpen(); });
       sec.addEventListener('medialoaded', (e) => { const img = e.detail; if (img.closest('.box-closed')) { const sh = $('.velvet-sheen', sec); sh.style.webkitMaskImage = sh.style.maskImage = `url(${img.currentSrc || img.src})`; } });
       if (hasGSAP && !RM) gsap.to($('.op-head', sec), { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.6, ease: 'power2.out', delay: 0.4 });
       else $('.op-head', sec).classList.remove('rise');
@@ -326,8 +334,8 @@ const CONFIG = {
             <p class="pleasure rise">${esc(C.pleasure)}<b>${esc(C.dateLine)} · ${esc(C.city)}</b></p>
           </div>
         </div>
-        <div class="plane bougain-fg" data-depth="22">${cut('bougainvillea', '', ART.bougainvillea(3), '', 'inset:0')}</div>
-        <div class="plane jharokha-edge" data-depth="34">${cut('jharokha-frame', '', ART.jharokha(), '', 'inset:0')}</div>`;
+        <div class="plane bougain-fg" data-depth="22" data-decor>${cut('bougainvillea', '', ART.bougainvillea(3), '', 'inset:0')}</div>
+        <div class="plane jharokha-edge" data-depth="34" data-decor>${cut('jharokha-frame', '', ART.jharokha(), '', 'inset:0')}</div>`;
     },
     init(sec) {
       this.glints = new FX.Glints($('[data-glints]', sec), { regions: [A.palace.fountain], count: 90, size: 11, sharp: 6 });
@@ -368,8 +376,8 @@ const CONFIG = {
       const b = C.couple.bride, g = C.couple.groom;
       return `<div class="plane" data-depth="-10" style="inset:-3% 0">${bg('sheesh-mahal', 'fb-mirror', '', '')}</div>
         <canvas class="glints" data-glints="mirror"></canvas>
-        <div class="plane chandelier ch-l" data-depth="10" data-pend="0">${cut('chandelier', '', ART.chandelier(), '', 'inset:0')}</div>
-        <div class="plane chandelier ch-r" data-depth="10" data-pend="1">${cut('chandelier', '', ART.chandelier(), '', 'inset:0')}</div>
+        <div class="plane chandelier ch-l" data-depth="10" data-pend="0" data-decor>${cut('chandelier', '', ART.chandelier(), '', 'inset:0')}</div>
+        <div class="plane chandelier ch-r" data-depth="10" data-pend="1" data-decor>${cut('chandelier', '', ART.chandelier(), '', 'inset:0')}</div>
         <div class="content">
           <div class="panel" role="group" aria-label="The invitation">
             <div class="l bless" lang="sa">${esc(C.blessing)}</div>
@@ -384,8 +392,8 @@ const CONFIG = {
             <div class="l date">${esc(C.dateLine)} · ${esc(C.city)}</div>
           </div>
         </div>
-        ${[0.04, 0.2, 0.74, 0.88].map((x, i) => `<div class="plane jasmine" data-depth="18" data-pend="${i + 2}" style="left:${x * 100}%;height:${[34, 22, 26, 36][i]}%;width:auto">${cut('jasmine-strand', '', ART.jasmine(), '', 'inset:0')}</div>`).join('')}
-        <div class="plane" data-depth="24" style="left:-20%;right:-20%;top:-3%;height:16%">${cut('bougainvillea', '', ART.bougainvillea(11), '', 'inset:0')}</div>`;
+        ${[0.04, 0.2, 0.74, 0.88].map((x, i) => `<div class="plane jasmine" data-depth="18" data-pend="${i + 2}" data-decor style="left:${x * 100}%;height:${[34, 22, 26, 36][i]}%;width:auto">${cut('jasmine-strand', '', ART.jasmine(), '', 'inset:0')}</div>`).join('')}
+        <div class="plane" data-depth="24" data-decor style="left:-20%;right:-20%;top:-3%;height:16%">${cut('bougainvillea', '', ART.bougainvillea(11), '', 'inset:0')}</div>`;
     },
     init(sec) {
       const mobile = innerWidth < 600;
