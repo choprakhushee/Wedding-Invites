@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en" data-story="coral">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Beach Wedding</title>
+<meta name="description" content="A barefoot-luxury beach wedding invitation. Sample template by Aamantran Atelier.">
+<meta property="og:title" content="Beach Wedding">
+<meta property="og:description" content="Join us by the sea. A wedding invitation by Aamantran Atelier.">
+<meta name="theme-color" content="#3FB8C4">
+<meta name="robots" content="noindex">
+<link rel="preload" href="fonts/cormorant-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/pinyon-script-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="beach.css">
+<script>document.documentElement.classList.add("js")</script>
+<script src="vendor/lz-string.min.js" defer></script>
+<script src="art.js" defer></script>
+<script src="sound.js" defer></script>
+<script src="beach.js" defer></script>
+</head>
+<body>
+<!-- shared SVG filters: watercolour bleed, soft cloud edges, glows -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="wc" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" seed="4" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="6" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="9" result="g"/>
+      <feColorMatrix in="g" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -0.9 1.35" result="ga"/>
+      <feComposite in="d" in2="ga" operator="in"/>
+    </filter>
+    <filter id="wcSoft" x="-20%" y="-30%" width="140%" height="160%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="2" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="9" result="d"/>
+      <feGaussianBlur in="d" stdDeviation="1.6"/>
+    </filter>
+    <filter id="blur6" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="blur3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+  </defs>
+</svg>
+
+<!-- desktop backdrop: the same sky, blurred, with sea and sand -->
+<div class="backdrop" aria-hidden="true"><div class="bd-sky"></div><div class="bd-sea"></div><div class="bd-sand"></div></div>
+
+<div class="phone">
+  <!-- the sky that tells the day: fixed behind the column, recoloured as you scroll -->
+  <div class="sky" aria-hidden="true">
+    <div class="sky-stars" id="sky-stars"></div>
+    <div class="sky-sun"></div>
+    <div class="sky-moon"></div>
+    <div class="sky-clouds" id="sky-clouds"></div>
+  </div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <main id="invite">
+    <!-- 1 · MORNING -->
+    <section class="hero tone-day" data-sky="0" id="top">
+      <div class="hero-scene" id="hero-scene"></div>
+      <div class="hero-copy">
+        <p class="eyebrow">Together by the sea</p>
+        <h1 class="names">
+          <span data-b="bride">Bride's Name</span>
+          <span class="amp">&amp;</span>
+          <span data-b="groom">Groom's Name</span>
+        </h1>
+        <p class="tagline" data-b="tagline">are getting married</p>
+        <p class="hero-date"><span data-f="dateDots"></span></p>
+        <p class="hero-city" data-b="city"></p>
+      </div>
+      <div class="edge-foam" id="edge-foam"></div>
+      <a class="scroll-cue" href="#invitation" aria-label="Scroll to the invitation"><span></span></a>
+    </section>
+
+    <!-- 2 · INVITATION -->
+    <section class="invitation chapter-sand tone-day" data-sky="0.4" id="invitation">
+      <div class="wrap reveal">
+        <p class="blessing" data-b="blessing" data-show="blessingOn"></p>
+        <div class="parents">
+          <p class="small-caps">With the blessings of</p>
+          <p><span data-b="brideParents"></span><br><span class="and">&amp;</span><br><span data-b="groomParents"></span></p>
+        </div>
+        <p class="wording" data-b="wording"></p>
+        <p class="script-names"><span data-b="bride"></span> <span class="amp">&amp;</span> <span data-b="groom"></span></p>
+        <div class="divider-slot"></div>
+        <p class="when"><span data-f="dateLong"></span><br><span data-b="city"></span></p>
+      </div>
+      <div class="edge-bottom" data-edge="paper:1:flip"></div>
+    </section>
+
+    <!-- 3 · AFTERNOON -->
+    <section class="events tone-day" data-sky="1" id="events">
+      <header class="section-head reveal">
+        <p class="eyebrow">The celebrations</p>
+        <h2>Under the afternoon sun</h2>
+        <div class="divider-slot"></div>
+      </header>
+      <div class="event-list" id="event-list"></div>
+    </section>
+
+    <!-- 4 · SEE THE ROUTE -->
+    <section class="route chapter-sand tone-day" data-sky="1.4" id="route">
+      <div class="edge-top" data-edge="paper:2"></div>
+      <div class="wrap reveal">
+        <p class="eyebrow">See the route</p>
+        <h2>Follow the footprints</h2>
+        <p class="venue-name" data-b="venueName"></p>
+        <p class="venue-address" data-b="venueAddress"></p>
+        <a class="btn" data-link="venueMap" href="#" target="_blank" rel="noopener">Open in Maps</a>
+      </div>
+      <div class="walk" id="walk"></div>
+      <div class="edge-bottom" data-edge="paper:3:flip"></div>
+      <div class="porthole" id="porthole"></div>
+    </section>
+
+    <!-- 5 · GOLDEN HOUR -->
+    <section class="couple tone-day" data-sky="2" id="couple">
+      <header class="section-head reveal">
+        <p class="eyebrow">Meet the bride &amp; groom</p>
+        <h2><span data-b="bride"></span> <span class="amp">&amp;</span> <span data-b="groom"></span></h2>
+      </header>
+      <div class="couple-frame reveal" id="couple-frame"></div>
+      <p class="story reveal" data-b="story"></p>
+    </section>
+
+    <!-- 6 · SUNSET -->
+    <section class="rsvp tone-sunset" data-sky="3" id="rsvp">
+      <header class="section-head reveal">
+        <p class="eyebrow">RSVP</p>
+        <h2 class="script-h">Join us by the sea</h2>
+      </header>
+      <div class="bottle-wrap" id="bottle-wrap">
+        <div class="bottle" id="bottle"></div>
+        <div class="note">
+          <p class="small-caps">A note from the shore</p>
+          <p>Kindly let us know if you can join us, by</p>
+          <p class="rsvp-by" data-f="rsvpBy"></p>
+          <a class="btn btn-solid" id="rsvp-btn" href="#" target="_blank" rel="noopener">Send your RSVP</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7 · DUSK -->
+    <section class="know tone-night" data-sky="4" id="know">
+      <header class="section-head reveal">
+        <p class="eyebrow">Before you pack</p>
+        <h2>Things to know</h2>
+      </header>
+      <ul class="know-list" id="know-list"></ul>
+    </section>
+
+    <!-- 8 · NIGHT -->
+    <section class="follow tone-night" data-sky="5" id="follow">
+      <div class="fairy" id="fairy"></div>
+      <header class="section-head reveal">
+        <p class="eyebrow">Follow the action</p>
+        <p class="hashtag" data-b="hashtag"></p>
+        <p class="follow-copy">Share your moments from the shore with our hashtag.</p>
+        <a class="btn btn-gold" data-link="instagram" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1"/></svg>
+          Follow on Instagram</a>
+      </header>
+    </section>
+
+    <!-- 9 · CALM CLOSE -->
+    <section class="countdown tone-night" data-sky="5.4" id="countdown">
+      <header class="section-head reveal">
+        <p class="eyebrow">Counting the tides</p>
+        <h2>Until we say “I do”</h2>
+      </header>
+      <div class="clock reveal">
+        <div class="hourglass" id="hourglass"></div>
+        <div class="units" role="timer" aria-live="off">
+          <div><b id="cd-d">00</b><span>Days</span></div>
+          <div><b id="cd-h">00</b><span>Hours</span></div>
+          <div><b id="cd-m">00</b><span>Minutes</span></div>
+          <div><b id="cd-s">00</b><span>Seconds</span></div>
+        </div>
+      </div>
+      <p class="closing reveal" data-b="closing"></p>
+      <p class="sign-names"><span data-b="bride"></span> <span class="amp">&amp;</span> <span data-b="groom"></span></p>
+      <div class="moonwater" id="moonwater"></div>
+      <footer class="signature">Made with love by <span>Aamantran Atelier</span></footer>
+    </section>
+  </main>
+
+  <!-- floating controls -->
+  <button class="fab fab-sound" id="sound-btn" type="button" aria-pressed="false" aria-label="Play sea sounds">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path class="on" d="M4 9h4l5-4v14l-5-4H4z"/><path class="on waves" d="M16 9c1.3 1.6 1.3 4.4 0 6M18.5 6.5c2.7 3 2.7 8 0 11"/><path class="off" d="M16 9l5 6M21 9l-5 6"/></svg>
+  </button>
+  <button class="fab fab-edit" id="edit-btn" type="button" aria-haspopup="dialog" aria-controls="editor">✎ Personalise</button>
+</div>
+
+<!-- editor -->
+<div class="scrim" id="scrim" hidden></div>
+<aside class="editor" id="editor" role="dialog" aria-modal="true" aria-labelledby="editor-title" hidden>
+  <div class="editor-head">
+    <h2 id="editor-title">✎ Personalise</h2>
+    <button class="icon-btn" id="editor-close" type="button" aria-label="Close the editor">✕</button>
+  </div>
+  <div class="editor-body" id="editor-body"></div>
+  <div class="editor-foot">
+    <button class="btn btn-solid" id="share-btn" type="button">Share with guests</button>
+    <button class="btn" id="copy-edit-btn" type="button">Copy edit link</button>
+    <button class="btn btn-quiet" id="reset-btn" type="button">Reset to sample</button>
+    <div class="share-out" id="share-out" hidden>
+      <label for="share-url" class="small-caps" id="share-label">Guest link</label>
+      <input id="share-url" type="text" readonly>
+    </div>
+  </div>
+</aside>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<noscript><p style="padding:40px;text-align:center">Please turn on JavaScript to open this invitation.</p></noscript>
+</body>
+</html>
